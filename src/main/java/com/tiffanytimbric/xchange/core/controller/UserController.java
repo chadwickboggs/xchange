@@ -16,6 +16,16 @@ public class UserController {
 
     private final UserRepository userRepository = new UserRepository();
 
+    @GetMapping("/userExist/{id}")
+    @NonNull
+    public boolean doesExist(@PathVariable @Nullable final String id) {
+        if (isBlank(id)) {
+            return false;
+        }
+
+        return userRepository.doesExist(id);
+    }
+
     @GetMapping("/user/{id}")
     @NonNull
     public Optional<User> readUser(@PathVariable @Nullable final String id) {

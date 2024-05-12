@@ -16,6 +16,16 @@ public class ItemController {
 
     private final ItemRepository itemRepository = new ItemRepository();
 
+    @GetMapping("/itemExist/{id}")
+    @NonNull
+    public boolean doesExist(@PathVariable @Nullable final String id) {
+        if (isBlank(id)) {
+            return false;
+        }
+
+        return itemRepository.doesExist(id);
+    }
+
     @GetMapping("/item/{id}")
     @NonNull
     public Optional<Item> readItem(@PathVariable @Nullable final String id) {

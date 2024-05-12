@@ -1,7 +1,6 @@
 package com.tiffanytimbric.xchange.core.repository;
 
 import com.tiffanytimbric.xchange.core.model.Item;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -9,13 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 public class ItemRepository {
 
     private final Map<String, Item> cache = new HashMap<>();
 
+    public boolean doesExist(@Nullable final String id) {
+        if (isBlank(id)) {
+            return false;
+        }
+
+        return cache.containsKey(id);
+    }
+
     @NonNull
-    public Optional<Item> readItem(@NonNull final String id) {
-        if (StringUtils.isBlank(id)) {
+    public Optional<Item> readItem(@Nullable final String id) {
+        if (isBlank(id)) {
             return Optional.empty();
         }
 
@@ -40,7 +49,7 @@ public class ItemRepository {
 
     @NonNull
     public Optional<Item> deleteItem(@Nullable final String id) {
-        if (StringUtils.isBlank(id)) {
+        if (isBlank(id)) {
             return Optional.empty();
         }
 

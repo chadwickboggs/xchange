@@ -16,6 +16,16 @@ public class TagController {
 
     private final TagRepository tagRepository = new TagRepository();
 
+    @GetMapping("/tagExist/{name}")
+    @NonNull
+    public boolean doesExist(@PathVariable @Nullable final String name) {
+        if (isBlank(name)) {
+            return false;
+        }
+
+        return tagRepository.doesExist(name);
+    }
+
     @GetMapping("/tag/{name}")
     @NonNull
     public Optional<Tag> readTag(@PathVariable @Nullable final String name) {

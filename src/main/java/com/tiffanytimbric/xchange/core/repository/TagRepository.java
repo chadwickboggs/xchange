@@ -1,7 +1,6 @@
 package com.tiffanytimbric.xchange.core.repository;
 
 import com.tiffanytimbric.xchange.core.model.Tag;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -9,13 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 public class TagRepository {
 
     private final Map<String, Tag> cache = new HashMap<>();
 
+    public boolean doesExist(@Nullable final String name) {
+        if (isBlank(name)) {
+            return false;
+        }
+
+        return cache.containsKey(name);
+    }
+
     @NonNull
     public Optional<Tag> readTag(@Nullable final String name) {
-        if (StringUtils.isBlank(name)) {
+        if (isBlank(name)) {
             return Optional.empty();
         }
 
@@ -40,7 +49,7 @@ public class TagRepository {
 
     @NonNull
     public Optional<Tag> deleteTag(@Nullable final String name) {
-        if (StringUtils.isBlank(name)) {
+        if (isBlank(name)) {
             return Optional.empty();
         }
 
