@@ -2,6 +2,7 @@ package com.tiffanytimbric.xchange.core.controller;
 
 import com.tiffanytimbric.xchange.core.model.User;
 import com.tiffanytimbric.xchange.core.repository.UserRepository;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -37,17 +38,23 @@ public class UserController {
     }
 
     @PutMapping("/user")
-    public String updateUser(@RequestBody final User user) {
-        // TODO: Implement.
+    @NonNull
+    public Optional<String> updateUser(@RequestBody @Nullable final User user) {
+        if (user == null) {
+            return Optional.empty();
+        }
 
-        return user.id();
+        throw new NotImplementedException();
     }
 
     @PatchMapping("/user")
-    public String patchUser(@RequestBody final User user) {
-        // TODO: Implement.
+    @NonNull
+    public Optional<String> patchUser(@RequestBody @Nullable final User user) {
+        if (user == null) {
+            return Optional.empty();
+        }
 
-        return user.id();
+        throw new NotImplementedException();
     }
 
     @DeleteMapping("/user/{id}")

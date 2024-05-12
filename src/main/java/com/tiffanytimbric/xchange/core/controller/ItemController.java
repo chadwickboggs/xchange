@@ -2,6 +2,7 @@ package com.tiffanytimbric.xchange.core.controller;
 
 import com.tiffanytimbric.xchange.core.model.Item;
 import com.tiffanytimbric.xchange.core.repository.ItemRepository;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -43,9 +44,7 @@ public class ItemController {
             return Optional.empty();
         }
 
-        // TODO: Implement.
-
-        return Optional.ofNullable(item.id());
+        throw new NotImplementedException();
     }
 
     @PatchMapping("/item")
@@ -55,9 +54,7 @@ public class ItemController {
             return Optional.empty();
         }
 
-        // TODO: Implement.
-
-        return Optional.ofNullable(item.id());
+        throw new NotImplementedException();
     }
 
     @DeleteMapping("/item/{id}")
