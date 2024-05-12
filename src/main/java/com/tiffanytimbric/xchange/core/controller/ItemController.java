@@ -1,47 +1,74 @@
 package com.tiffanytimbric.xchange.core.controller;
 
 import com.tiffanytimbric.xchange.core.model.Item;
-import com.tiffanytimbric.xchange.core.model.KC;
+import com.tiffanytimbric.xchange.core.repository.ItemRepository;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
 public class ItemController {
 
-    @GetMapping("/item/{id}")
-    public Item readItem(@PathVariable final String id) {
-        // TODO: Implement.
+    private final ItemRepository itemRepository = new ItemRepository();
 
-        return new Item(id, "", "", List.of(), new KC(1));
+    @GetMapping("/item/{id}")
+    @NonNull
+    public Optional<Item> readItem(@PathVariable @Nullable final String id) {
+        if (isBlank(id)) {
+            return Optional.empty();
+        }
+
+        return itemRepository.readItem(id);
     }
 
     @PostMapping("/item")
-    public String createItem(@RequestBody final Item item) {
-        // TODO: Implement.
+    @NonNull
+    public Optional<String> createItem(@RequestBody @Nullable final Item item) {
+        if (item == null) {
+            return Optional.empty();
+        }
 
-        return item.id();
+        return itemRepository.createItem(item)
+                .map(Item::id);
     }
 
     @PutMapping("/item")
-    public String updateItem(@RequestBody final Item item) {
+    @NonNull
+    public Optional<String> updateItem(@RequestBody @Nullable final Item item) {
+        if (item == null) {
+            return Optional.empty();
+        }
+
         // TODO: Implement.
 
-        return item.id();
+        return Optional.ofNullable(item.id());
     }
 
     @PatchMapping("/item")
-    public String patchItem(@RequestBody final Item item) {
+    @NonNull
+    public Optional<String> patchItem(@RequestBody @Nullable final Item item) {
+        if (item == null) {
+            return Optional.empty();
+        }
+
         // TODO: Implement.
 
-        return item.id();
+        return Optional.ofNullable(item.id());
     }
 
     @DeleteMapping("/item/{id}")
-    public String deleteItem(@PathVariable final String id) {
-        // TODO: Implement.
+    @NonNull
+    public Optional<String> deleteItem(@PathVariable @Nullable final String id) {
+        if (isBlank(id)) {
+            return Optional.empty();
+        }
 
-        return id;
+        return itemRepository.deleteItem(id)
+                .map(Item::id);
     }
 
 }
