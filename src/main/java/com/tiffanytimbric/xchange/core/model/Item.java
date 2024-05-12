@@ -7,6 +7,6 @@ public record Item(
         String name,
         String description,
         List<Tag> tags,
-        KC price
+        int price
 ) {
 }

@@ -1,4 +1,4 @@
 package com.tiffanytimbric.xchange.core.model;
 
-public record User(String id, String name) {
+public record User(String id, String name, int balance) {
 }
