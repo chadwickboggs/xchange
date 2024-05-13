@@ -2,7 +2,7 @@ package com.tiffanytimbric.xchange.core.controller;
 
 import com.tiffanytimbric.xchange.core.model.Tag;
 import com.tiffanytimbric.xchange.core.repository.TagRepository;
-import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -56,7 +56,9 @@ public class TagController {
             return ResponseEntity.ofNullable(null);
         }
 
-        throw new NotImplementedException();
+        return ResponseEntity
+                .status(HttpStatusCode.valueOf(500))
+                .build();
     }
 
     @PatchMapping("/tag")
@@ -66,7 +68,9 @@ public class TagController {
             return ResponseEntity.ofNullable(null);
         }
 
-        throw new NotImplementedException();
+        return ResponseEntity
+                .status(HttpStatusCode.valueOf(500))
+                .build();
     }
 
     @DeleteMapping("/tag/{name}")
