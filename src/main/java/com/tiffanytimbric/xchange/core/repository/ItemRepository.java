@@ -7,40 +7,32 @@ import org.springframework.lang.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class ItemRepository {
 
-    private final Map<String, Item> cache = new HashMap<>();
+    private final Map<Long, Item> cache = new HashMap<>();
+    private static final AtomicLong currentMaxItemId = new AtomicLong();
 
-    public boolean doesExist(@Nullable final String id) {
-        if (isBlank(id)) {
-            return false;
-        }
-
+    public boolean doesExist(final long id) {
         return cache.containsKey(id);
     }
 
     @NonNull
-    public Optional<Item> readItem(@Nullable final String id) {
-        if (isBlank(id)) {
-            return Optional.empty();
-        }
-
+    public Optional<Item> readItem(final long id) {
         return Optional.ofNullable(cache.get(id));
     }
 
     @NonNull
-    public Optional<Item> createItem(@Nullable final Item item) {
+    public Optional<Item> createItem(@Nullable Item item) {
         if (item == null) {
             return Optional.empty();
         }
 
-        final Item alreadyExistingItem = cache.get(item.id());
-        if (alreadyExistingItem != null) {
-            return Optional.of(alreadyExistingItem);
-        }
+        item = new Item(
+                currentMaxItemId.addAndGet(1),
+                item.name(), item.description(), item.tags(), item.owner(), item.price()
+        );
 
         return Optional.ofNullable(
                 cache.put(item.id(), item)
@@ -48,11 +40,7 @@ public class ItemRepository {
     }
 
     @NonNull
-    public Optional<Item> deleteItem(@Nullable final String id) {
-        if (isBlank(id)) {
-            return Optional.empty();
-        }
-
+    public Optional<Item> deleteItem(final long id) {
         return Optional.ofNullable(cache.remove(id));
     }
 

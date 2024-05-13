@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 @RestController
 public class ItemController {
 
@@ -18,27 +16,19 @@ public class ItemController {
 
     @GetMapping("/itemExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable @Nullable final String id) {
-        if (isBlank(id)) {
-            return false;
-        }
-
+    public boolean doesExist(@PathVariable final long id) {
         return itemRepository.doesExist(id);
     }
 
     @GetMapping("/item/{id}")
     @NonNull
-    public Optional<Item> readItem(@PathVariable @Nullable final String id) {
-        if (isBlank(id)) {
-            return Optional.empty();
-        }
-
+    public Optional<Item> readItem(@PathVariable final long id) {
         return itemRepository.readItem(id);
     }
 
     @PostMapping("/item")
     @NonNull
-    public Optional<String> createItem(@RequestBody @Nullable final Item item) {
+    public Optional<Long> createItem(@RequestBody @Nullable final Item item) {
         if (item == null) {
             return Optional.empty();
         }
@@ -49,7 +39,7 @@ public class ItemController {
 
     @PutMapping("/item")
     @NonNull
-    public Optional<String> updateItem(@RequestBody @Nullable final Item item) {
+    public Optional<Long> updateItem(@RequestBody @Nullable final Item item) {
         if (item == null) {
             return Optional.empty();
         }
@@ -59,7 +49,7 @@ public class ItemController {
 
     @PatchMapping("/item")
     @NonNull
-    public Optional<String> patchItem(@RequestBody @Nullable final Item item) {
+    public Optional<Long> patchItem(@RequestBody @Nullable final Item item) {
         if (item == null) {
             return Optional.empty();
         }
@@ -69,11 +59,7 @@ public class ItemController {
 
     @DeleteMapping("/item/{id}")
     @NonNull
-    public Optional<String> deleteItem(@PathVariable @Nullable final String id) {
-        if (isBlank(id)) {
-            return Optional.empty();
-        }
-
+    public Optional<Long> deleteItem(@PathVariable final long id) {
         return itemRepository.deleteItem(id)
                 .map(Item::id);
     }

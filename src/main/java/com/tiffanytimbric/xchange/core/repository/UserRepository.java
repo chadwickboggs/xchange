@@ -7,40 +7,31 @@ import org.springframework.lang.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class UserRepository {
 
-    private final Map<String, User> cache = new HashMap<>();
+    private final Map<Long, User> cache = new HashMap<>();
+    private static final AtomicLong currentMaxUserId = new AtomicLong();
 
-    public boolean doesExist(@Nullable final String id) {
-        if (isBlank(id)) {
-            return false;
-        }
-
+    public boolean doesExist(final long id) {
         return cache.containsKey(id);
     }
 
     @NonNull
-    public Optional<User> readUser(@Nullable final String id) {
-        if (isBlank(id)) {
-            return Optional.empty();
-        }
-
+    public Optional<User> readUser(final long id) {
         return Optional.ofNullable(cache.get(id));
     }
 
     @NonNull
-    public Optional<User> createUser(@Nullable final User user) {
+    public Optional<User> createUser(@Nullable User user) {
         if (user == null) {
             return Optional.empty();
         }
 
-        final User alreadyExistingUser = cache.get(user.id());
-        if (alreadyExistingUser != null) {
-            return Optional.of(alreadyExistingUser);
-        }
+        user = new User(
+                currentMaxUserId.addAndGet(1), user.name(), user.balance()
+        );
 
         return Optional.ofNullable(
                 cache.put(user.id(), user)
@@ -48,11 +39,7 @@ public class UserRepository {
     }
 
     @NonNull
-    public Optional<User> deleteUser(@Nullable final String id) {
-        if (isBlank(id)) {
-            return Optional.empty();
-        }
-
+    public Optional<User> deleteUser(final long id) {
         return Optional.ofNullable(cache.remove(id));
     }
 

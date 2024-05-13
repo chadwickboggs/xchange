@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 @RestController
 public class UserController {
 
@@ -18,27 +16,19 @@ public class UserController {
 
     @GetMapping("/userExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable @Nullable final String id) {
-        if (isBlank(id)) {
-            return false;
-        }
-
+    public boolean doesExist(@PathVariable final long id) {
         return userRepository.doesExist(id);
     }
 
     @GetMapping("/user/{id}")
     @NonNull
-    public Optional<User> readUser(@PathVariable @Nullable final String id) {
-        if (isBlank(id)) {
-            return Optional.empty();
-        }
-
+    public Optional<User> readUser(@PathVariable final long id) {
         return userRepository.readUser(id);
     }
 
     @PostMapping("/user")
     @NonNull
-    public Optional<String> createUser(@RequestBody @Nullable final User user) {
+    public Optional<Long> createUser(@RequestBody @Nullable final User user) {
         if (user == null) {
             return Optional.empty();
         }
@@ -49,7 +39,7 @@ public class UserController {
 
     @PutMapping("/user")
     @NonNull
-    public Optional<String> updateUser(@RequestBody @Nullable final User user) {
+    public Optional<Long> updateUser(@RequestBody @Nullable final User user) {
         if (user == null) {
             return Optional.empty();
         }
@@ -59,7 +49,7 @@ public class UserController {
 
     @PatchMapping("/user")
     @NonNull
-    public Optional<String> patchUser(@RequestBody @Nullable final User user) {
+    public Optional<Long> patchUser(@RequestBody @Nullable final User user) {
         if (user == null) {
             return Optional.empty();
         }
@@ -69,11 +59,7 @@ public class UserController {
 
     @DeleteMapping("/user/{id}")
     @NonNull
-    public Optional<String> deleteUser(@PathVariable @Nullable final String id) {
-        if (isBlank(id)) {
-            return Optional.empty();
-        }
-
+    public Optional<Long> deleteUser(@PathVariable final long id) {
         return userRepository.deleteUser(id)
                 .map(User::id);
     }
