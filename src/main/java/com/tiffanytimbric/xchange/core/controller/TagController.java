@@ -3,11 +3,10 @@ package com.tiffanytimbric.xchange.core.controller;
 import com.tiffanytimbric.xchange.core.model.Tag;
 import com.tiffanytimbric.xchange.core.repository.TagRepository;
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -28,30 +27,33 @@ public class TagController {
 
     @GetMapping("/tag/{name}")
     @NonNull
-    public Optional<Tag> readTag(@PathVariable @Nullable final String name) {
+    public ResponseEntity<Tag> readTag(@PathVariable @Nullable final String name) {
         if (isBlank(name)) {
-            return Optional.empty();
+            return ResponseEntity.ofNullable(null);
         }
 
-        return tagRepository.readTag(name);
+        return ResponseEntity.of(
+                tagRepository.readTag(name)
+        );
     }
 
     @PostMapping("/tag")
     @NonNull
-    public Optional<String> createTag(@RequestBody @Nullable final Tag tag) {
+    public ResponseEntity<Tag> createTag(@RequestBody @Nullable final Tag tag) {
         if (tag == null) {
-            return Optional.empty();
+            return ResponseEntity.ofNullable(null);
         }
 
-        return tagRepository.createTag(tag)
-                .map(Tag::name);
+        return ResponseEntity.of(
+                tagRepository.createTag(tag)
+        );
     }
 
     @PutMapping("/tag")
     @NonNull
-    public Optional<String> updateTag(@RequestBody @Nullable final Tag tag) {
+    public ResponseEntity<Tag> updateTag(@RequestBody @Nullable final Tag tag) {
         if (tag == null) {
-            return Optional.empty();
+            return ResponseEntity.ofNullable(null);
         }
 
         throw new NotImplementedException();
@@ -59,9 +61,9 @@ public class TagController {
 
     @PatchMapping("/tag")
     @NonNull
-    public Optional<String> patchTag(@RequestBody @Nullable final Tag tag) {
+    public ResponseEntity<Tag> patchTag(@RequestBody @Nullable final Tag tag) {
         if (tag == null) {
-            return Optional.empty();
+            return ResponseEntity.ofNullable(null);
         }
 
         throw new NotImplementedException();
@@ -69,13 +71,14 @@ public class TagController {
 
     @DeleteMapping("/tag/{name}")
     @NonNull
-    public Optional<String> deleteTag(@PathVariable @Nullable final String name) {
+    public ResponseEntity<Tag> deleteTag(@PathVariable @Nullable final String name) {
         if (isBlank(name)) {
-            return Optional.empty();
+            return ResponseEntity.ofNullable(null);
         }
 
-        return tagRepository.deleteTag(name)
-                .map(Tag::name);
+        return ResponseEntity.of(
+                tagRepository.deleteTag(name)
+        );
     }
 
 }

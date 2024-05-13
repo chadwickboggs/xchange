@@ -20,7 +20,9 @@ public class ItemRepository {
 
     @NonNull
     public Optional<Item> readItem(final long id) {
-        return Optional.ofNullable(cache.get(id));
+        return Optional.ofNullable(
+                cache.get(id)
+        );
     }
 
     @NonNull
@@ -34,14 +36,16 @@ public class ItemRepository {
                 item.name(), item.description(), item.tags(), item.owner(), item.price()
         );
 
-        return Optional.ofNullable(
-                cache.put(item.id(), item)
-        );
+        cache.put(item.id(), item);
+
+        return Optional.of(item);
     }
 
     @NonNull
     public Optional<Item> deleteItem(final long id) {
-        return Optional.ofNullable(cache.remove(id));
+        return Optional.ofNullable(
+                cache.remove(id)
+        );
     }
 
 }

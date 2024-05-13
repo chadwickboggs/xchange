@@ -3,11 +3,10 @@ package com.tiffanytimbric.xchange.core.controller;
 import com.tiffanytimbric.xchange.core.model.Item;
 import com.tiffanytimbric.xchange.core.repository.ItemRepository;
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 public class ItemController {
@@ -22,26 +21,29 @@ public class ItemController {
 
     @GetMapping("/item/{id}")
     @NonNull
-    public Optional<Item> readItem(@PathVariable final long id) {
-        return itemRepository.readItem(id);
+    public ResponseEntity<Item> readItem(@PathVariable final long id) {
+        return ResponseEntity.of(
+                itemRepository.readItem(id)
+        );
     }
 
     @PostMapping("/item")
     @NonNull
-    public Optional<Long> createItem(@RequestBody @Nullable final Item item) {
+    public ResponseEntity<Item> createItem(@RequestBody @Nullable final Item item) {
         if (item == null) {
-            return Optional.empty();
+            return ResponseEntity.ofNullable(null);
         }
 
-        return itemRepository.createItem(item)
-                .map(Item::id);
+        return ResponseEntity.of(
+                itemRepository.createItem(item)
+        );
     }
 
     @PutMapping("/item")
     @NonNull
-    public Optional<Long> updateItem(@RequestBody @Nullable final Item item) {
+    public ResponseEntity<Item> updateItem(@RequestBody @Nullable final Item item) {
         if (item == null) {
-            return Optional.empty();
+            return ResponseEntity.ofNullable(null);
         }
 
         throw new NotImplementedException();
@@ -49,9 +51,9 @@ public class ItemController {
 
     @PatchMapping("/item")
     @NonNull
-    public Optional<Long> patchItem(@RequestBody @Nullable final Item item) {
+    public ResponseEntity<Item> patchItem(@RequestBody @Nullable final Item item) {
         if (item == null) {
-            return Optional.empty();
+            return ResponseEntity.ofNullable(null);
         }
 
         throw new NotImplementedException();
@@ -59,9 +61,10 @@ public class ItemController {
 
     @DeleteMapping("/item/{id}")
     @NonNull
-    public Optional<Long> deleteItem(@PathVariable final long id) {
-        return itemRepository.deleteItem(id)
-                .map(Item::id);
+    public ResponseEntity<Item> deleteItem(@PathVariable final long id) {
+        return ResponseEntity.of(
+                itemRepository.deleteItem(id)
+        );
     }
 
 }

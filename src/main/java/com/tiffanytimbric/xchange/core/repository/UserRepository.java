@@ -20,7 +20,9 @@ public class UserRepository {
 
     @NonNull
     public Optional<User> readUser(final long id) {
-        return Optional.ofNullable(cache.get(id));
+        return Optional.ofNullable(
+                cache.get(id)
+        );
     }
 
     @NonNull
@@ -30,17 +32,20 @@ public class UserRepository {
         }
 
         user = new User(
-                currentMaxUserId.addAndGet(1), user.name(), user.balance()
+                currentMaxUserId.addAndGet(1),
+                user.name(), user.balance()
         );
 
-        return Optional.ofNullable(
-                cache.put(user.id(), user)
-        );
+        cache.put(user.id(), user);
+
+        return Optional.of(user);
     }
 
     @NonNull
     public Optional<User> deleteUser(final long id) {
-        return Optional.ofNullable(cache.remove(id));
+        return Optional.ofNullable(
+                cache.remove(id)
+        );
     }
 
 }

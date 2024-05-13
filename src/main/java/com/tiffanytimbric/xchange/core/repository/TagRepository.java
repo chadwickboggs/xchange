@@ -28,7 +28,9 @@ public class TagRepository {
             return Optional.empty();
         }
 
-        return Optional.ofNullable(cache.get(name));
+        return Optional.ofNullable(
+                cache.get(name)
+        );
     }
 
     @NonNull
@@ -42,18 +44,20 @@ public class TagRepository {
             return Optional.of(alreadyExistingTag);
         }
 
-        return Optional.ofNullable(
-                cache.put(tag.name(), tag)
-        );
+        cache.put(tag.name(), tag);
+
+        return Optional.of(tag);
     }
 
     @NonNull
-    public Optional<Tag> deleteTag(@Nullable final String name) {
+public Optional<Tag> deleteTag(@Nullable final String name) {
         if (isBlank(name)) {
             return Optional.empty();
         }
 
-        return Optional.ofNullable(cache.remove(name));
+        return Optional.ofNullable(
+                cache.remove(name)
+        );
     }
 
 }
