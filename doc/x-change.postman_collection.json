@@ -11,6 +11,31 @@
 			"name": "Tag",
 			"item": [
 				{
+					"name": "Does Exist",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/tagExist/red",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"tagExist",
+								"red"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create",
 					"event": [
 						{
@@ -195,7 +220,12 @@
 						"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
 				{
 					"name": "Does Exist",
 					"request": {
@@ -207,25 +237,20 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/tagExist/red",
+							"raw": "http://{{host}}:{{port}}/userExist/1",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"tagExist",
-								"red"
+								"userExist",
+								"1"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "User",
-			"item": [
+				},
 				{
 					"name": "Create",
 					"event": [
@@ -411,7 +436,12 @@
 						"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Item",
+			"item": [
 				{
 					"name": "Does Exist",
 					"request": {
@@ -423,25 +453,20 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/userExist/1",
+							"raw": "http://{{host}}:{{port}}/itemExist/1",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"userExist",
+								"itemExist",
 								"1"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Item",
-			"item": [
+				},
 				{
 					"name": "Create",
 					"event": [
@@ -625,31 +650,6 @@
 							]
 						},
 						"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
-					},
-					"response": []
-				},
-				{
-					"name": "Does Exist",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "http://{{host}}:{{port}}/itemExist/1",
-							"protocol": "http",
-							"host": [
-								"{{host}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"itemExist",
-								"1"
-							]
-						}
 					},
 					"response": []
 				}
