@@ -3,12 +3,14 @@ package com.tiffanytimbric.xchange.core.repository;
 import com.tiffanytimbric.xchange.core.model.Item;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Repository
 public class ItemRepository {
 
     private final Map<Long, Item> cache = new HashMap<>();

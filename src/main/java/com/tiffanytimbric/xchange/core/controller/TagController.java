@@ -7,13 +7,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
 public class TagController {
 
-    private final TagRepository tagRepository = new TagRepository();
+    private final TagRepository tagRepository;
+
+    public TagController(
+            @NonNull final TagRepository tagRepository
+    ) {
+        this.tagRepository = tagRepository;
+    }
 
     @GetMapping("/tagExist/{name}")
     @NonNull
@@ -56,9 +63,10 @@ public class TagController {
             return ResponseEntity.ofNullable(null);
         }
 
-        return ResponseEntity
-                .status(HttpStatusCode.valueOf(500))
-                .build();
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"updateTag\""
+        );
     }
 
     @PatchMapping("/tag")
@@ -68,9 +76,10 @@ public class TagController {
             return ResponseEntity.ofNullable(null);
         }
 
-        return ResponseEntity
-                .status(HttpStatusCode.valueOf(500))
-                .build();
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"patchTag\""
+        );
     }
 
     @DeleteMapping("/tag/{name}")

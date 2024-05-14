@@ -7,11 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository = new UserRepository();
+    private final UserRepository userRepository;
+
+    public UserController(
+            @NonNull final UserRepository userRepository
+    ) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/userExist/{id}")
     @NonNull
@@ -46,9 +53,10 @@ public class UserController {
             return ResponseEntity.ofNullable(null);
         }
 
-        return ResponseEntity
-                .status(HttpStatusCode.valueOf(500))
-                .build();
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"updateUser\""
+        );
     }
 
     @PatchMapping("/user")
@@ -58,9 +66,10 @@ public class UserController {
             return ResponseEntity.ofNullable(null);
         }
 
-        return ResponseEntity
-                .status(HttpStatusCode.valueOf(500))
-                .build();
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"patchUser\""
+        );
     }
 
     @DeleteMapping("/user/{id}")

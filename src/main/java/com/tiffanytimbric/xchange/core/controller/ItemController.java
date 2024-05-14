@@ -7,11 +7,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import static java.lang.String.format;
 
 @RestController
 public class ItemController {
 
-    private final ItemRepository itemRepository = new ItemRepository();
+    private final ItemRepository itemRepository;
+    private final UserController userController;
+    private final TagController tagController;
+
+    public ItemController(
+            @NonNull final ItemRepository itemRepository,
+            @NonNull final UserController userController,
+            @NonNull final TagController tagController
+    ) {
+        this.itemRepository = itemRepository;
+        this.userController = userController;
+        this.tagController = tagController;
+    }
 
     @GetMapping("/itemExist/{id}")
     @NonNull
@@ -34,6 +49,19 @@ public class ItemController {
             return ResponseEntity.ofNullable(null);
         }
 
+        // Verify the referenced owner exists.
+        if (!userController.doesExist(item.owner())) {
+            throw new ResponseStatusException(
+                    HttpStatusCode.valueOf(400),
+                    format(
+                            "Invalid owner, owner not found.  Owner: %s", item.owner()
+                    )
+            );
+        }
+
+        // Create referenced tags.
+        item.tagsOpt().forEach(tagController::createTag);
+
         return ResponseEntity.of(
                 itemRepository.createItem(item)
         );
@@ -46,9 +74,10 @@ public class ItemController {
             return ResponseEntity.ofNullable(null);
         }
 
-        return ResponseEntity
-                .status(HttpStatusCode.valueOf(500))
-                .build();
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"updateItem\""
+        );
     }
 
     @PatchMapping("/item")
@@ -58,9 +87,10 @@ public class ItemController {
             return ResponseEntity.ofNullable(null);
         }
 
-        return ResponseEntity
-                .status(HttpStatusCode.valueOf(500))
-                .build();
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"patchItem\""
+        );
     }
 
     @DeleteMapping("/item/{id}")

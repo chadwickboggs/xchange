@@ -3,6 +3,7 @@ package com.tiffanytimbric.xchange.core.repository;
 import com.tiffanytimbric.xchange.core.model.Tag;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@Repository
 public class TagRepository {
 
     private final Map<String, Tag> cache = new HashMap<>();
