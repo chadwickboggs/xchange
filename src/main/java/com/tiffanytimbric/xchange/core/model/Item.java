@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Entity
 @Table(name = "item")
 public class Item implements Serializable {
@@ -22,6 +24,7 @@ public class Item implements Serializable {
     private Long id;
     private String name;
     private String description;
+    private String photoUrl;
     @ManyToMany(
             fetch = FetchType.EAGER
     )
@@ -33,6 +36,27 @@ public class Item implements Serializable {
     private Set<Tag> tags;
     private long owner;
     private int price;
+
+    public Item() {
+    }
+
+    public Item(
+            @NonNull final Long id,
+            @NonNull final String name,
+            @NonNull final String description,
+            @NonNull final String photoUrl,
+            @NonNull final Set<Tag> tags,
+            final long owner,
+            final int price
+    ) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.photoUrl = photoUrl;
+        this.tags = tags;
+        this.owner = owner;
+        this.price = price;
+    }
 
     @Nullable
     public Long getId() {
@@ -74,6 +98,24 @@ public class Item implements Serializable {
 
     public void setDescription(@NonNull final String description) {
         this.description = description;
+    }
+
+    @Nullable
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    @NonNull
+    public Optional<String> photoUrlOpt() {
+        if (isBlank(photoUrl)) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(photoUrl);
+    }
+
+    public void setPhotoUrl(@NonNull final String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     @Nullable
@@ -126,6 +168,7 @@ public class Item implements Serializable {
                 .append(this.id, rhs.id)
                 .append(this.name, rhs.name)
                 .append(this.description, rhs.description)
+                .append(this.photoUrl, rhs.photoUrl)
                 .append(this.tags, rhs.tags)
                 .append(this.owner, rhs.owner)
                 .append(this.price, rhs.price)
@@ -146,6 +189,7 @@ public class Item implements Serializable {
                 .append("id", id)
                 .append("name", name)
                 .append("description", description)
+                .append("photoUrl", photoUrl)
                 .append("tags", tags)
                 .append("owner", owner)
                 .append("price", price)
