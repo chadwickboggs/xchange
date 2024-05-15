@@ -55,9 +55,8 @@ public class UserController {
             return ResponseEntity.ofNullable(null);
         }
 
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"updateUser\""
+        return ResponseEntity.of(
+                Optional.of(userRepository.save(user))
         );
     }
 

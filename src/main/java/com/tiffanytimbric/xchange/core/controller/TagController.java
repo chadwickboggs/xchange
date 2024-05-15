@@ -65,9 +65,8 @@ public class TagController {
             return ResponseEntity.ofNullable(null);
         }
 
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"updateTag\""
+        return ResponseEntity.of(
+                Optional.of(tagRepository.save(tag))
         );
     }
 

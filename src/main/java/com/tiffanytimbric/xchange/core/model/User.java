@@ -10,6 +10,8 @@ import org.springframework.lang.Nullable;
 import java.io.Serializable;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
@@ -18,6 +20,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String photoUrl;
     private int balance;
 
     public User() {
@@ -26,10 +29,12 @@ public class User implements Serializable {
     public User(
             @NonNull final Long id,
             @NonNull final String name,
+            @NonNull final String photoUrl,
             final int balance
     ) {
         this.id = id;
         this.name = name;
+        this.photoUrl = photoUrl;
         this.balance = balance;
     }
 
@@ -52,13 +57,31 @@ public class User implements Serializable {
         return name;
     }
 
+    @NonNull
+    public Optional<String> nameOpt() {
+        return Optional.ofNullable(name);
+    }
+
     public void setName(@NonNull final String name) {
         this.name = name;
     }
 
+    @Nullable
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
     @NonNull
-    public Optional<String> nameOpt() {
-        return Optional.ofNullable(name);
+    public Optional<String> photoUrlOpt() {
+        if (isBlank(photoUrl)) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(photoUrl);
+    }
+
+    public void setPhotoUrl(@NonNull final String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public int getBalance() {
@@ -84,6 +107,7 @@ public class User implements Serializable {
         return new EqualsBuilder()
                 .append(this.id, rhs.id)
                 .append(this.name, rhs.name)
+                .append(this.photoUrl, rhs.photoUrl)
                 .append(this.balance, rhs.balance)
                 .isEquals();
     }
@@ -96,10 +120,12 @@ public class User implements Serializable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
                 .append("name", name)
+                .append("photoUrl", photoUrl)
                 .append("balance", balance)
                 .toString();
     }

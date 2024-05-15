@@ -57,7 +57,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"red\"\n}",
+							"raw": "{\n\t\"name\": \"green\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -489,7 +489,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"owner\": 1,\n    \"price\": \"40\"\n}",
+							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Rainbow interior wall paint.\",\n    \"photoUrl\": \"https://i.pinimg.com/736x/86/33/63/863363ede6741f947b85a32158ce9f7b.jpg\",\n    \"owner\": 1,\n    \"tags\": [\n        {\n            \"name\": \"red\"\n        },\n        {\n            \"name\": \"green\"\n        },\n        {\n            \"name\": \"blue\"\n        }\n    ],\n    \"price\": \"50\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -522,7 +522,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/item/1",
+							"raw": "http://{{host}}:{{port}}/item/11",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -530,7 +530,7 @@
 							"port": "{{port}}",
 							"path": [
 								"item",
-								"1"
+								"11"
 							]
 						}
 					},
@@ -558,7 +558,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"owner\": 1,\n    \"price\": \"42\"\n}",
+							"raw": "{\n    \"id\": 1,\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"owner\": 1,\n    \"tags\": [\n        {\n            \"name\": \"red\"\n        }\n    ],\n    \"price\": \"42\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -638,7 +638,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/item/1",
+							"raw": "http://{{host}}:{{port}}/item/10",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -646,7 +646,7 @@
 							"port": "{{port}}",
 							"path": [
 								"item",
-								"1"
+								"10"
 							]
 						},
 						"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."

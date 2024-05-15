@@ -8,9 +8,10 @@ CREATE TABLE IF NOT EXISTS tag
 
 CREATE TABLE IF NOT EXISTS user
 (
-    id      int auto_increment,
-    name    varchar(64),
-    balance int,
+    id        int auto_increment,
+    name      varchar(64),
+    photo_url varchar(128),
+    balance   int,
     primary key (id)
 );
 
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS item
     id          int auto_increment,
     name        varchar(64),
     description text,
+    photo_url   varchar(128),
     owner       int,
     price       int,
     primary key (id),
@@ -29,7 +31,7 @@ CREATE TABLE IF NOT EXISTS item_tag_xref
 (
     tagName varchar(64),
     itemId  int,
-    primary key (tagName, itemId),
-    foreign key (tagName) references tag (name),
-    foreign key (itemId) references item (id)
+    primary key (tag_name, item_id),
+    foreign key (tag_name) references tag (name),
+    foreign key (item_id) references item (id)
 );
