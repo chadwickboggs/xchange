@@ -96,6 +96,7 @@ public class User implements Serializable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
