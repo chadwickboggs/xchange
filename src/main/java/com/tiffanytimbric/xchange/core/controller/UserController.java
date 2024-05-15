@@ -9,6 +9,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @RestController
 public class UserController {
 
@@ -23,14 +25,14 @@ public class UserController {
     @GetMapping("/userExist/{id}")
     @NonNull
     public boolean doesExist(@PathVariable final long id) {
-        return userRepository.doesExist(id);
+        return userRepository.existsById(id);
     }
 
     @GetMapping("/user/{id}")
     @NonNull
     public ResponseEntity<User> readUser(@PathVariable final long id) {
         return ResponseEntity.of(
-                userRepository.readUser(id)
+                userRepository.findById(id)
         );
     }
 
@@ -42,7 +44,7 @@ public class UserController {
         }
 
         return ResponseEntity.of(
-                userRepository.createUser(user)
+                Optional.of(userRepository.save(user))
         );
     }
 
@@ -75,9 +77,14 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     @NonNull
     public ResponseEntity<User> deleteUser(@PathVariable final long id) {
-        return ResponseEntity.of(
-                userRepository.deleteUser(id)
-        );
+        final Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.ofNullable(null);
+        }
+
+        userRepository.deleteById(id);
+
+        return ResponseEntity.of(userOpt);
     }
 
 }

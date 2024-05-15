@@ -9,6 +9,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
@@ -29,7 +31,7 @@ public class TagController {
             return false;
         }
 
-        return tagRepository.doesExist(name);
+        return tagRepository.existsById(name);
     }
 
     @GetMapping("/tag/{name}")
@@ -40,7 +42,7 @@ public class TagController {
         }
 
         return ResponseEntity.of(
-                tagRepository.readTag(name)
+                tagRepository.findById(name)
         );
     }
 
@@ -52,7 +54,7 @@ public class TagController {
         }
 
         return ResponseEntity.of(
-                tagRepository.createTag(tag)
+                Optional.of(tagRepository.save(tag))
         );
     }
 
@@ -89,9 +91,14 @@ public class TagController {
             return ResponseEntity.ofNullable(null);
         }
 
-        return ResponseEntity.of(
-                tagRepository.deleteTag(name)
-        );
+        final Optional<Tag> tagOpt = tagRepository.findById(name);
+        if (tagOpt.isEmpty()) {
+            return ResponseEntity.ofNullable(null);
+        }
+
+        tagRepository.deleteById(name);
+
+        return ResponseEntity.of(tagOpt);
     }
 
 }

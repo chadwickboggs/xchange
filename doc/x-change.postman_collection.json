@@ -489,7 +489,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"tags\": [\n        { \"name\": \"red\" }\n    ],\n    \"owner\": 1,\n    \"price\": \"40\"\n}",
+							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"owner\": 1,\n    \"price\": \"40\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -558,7 +558,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"tags\": [\n        { \"name\": \"red\" }\n    ],\n    \"owner\": 1,\n    \"price\": \"42\"\n}",
+							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"owner\": 1,\n    \"price\": \"42\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -592,7 +592,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"tags\": [\n        { \"name\": \"red\" }\n    ],\n    \"owner\": 1,\n    \"price\": \"45\"\n}"
+							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Red interior wall paint.\",\n    \"owner\": 1,\n    \"price\": \"45\"\n}"
 						},
 						"url": {
 							"raw": "http://{{host}}:{{port}}/item",
