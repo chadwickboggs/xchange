@@ -67,6 +67,7 @@ public class Tag implements Serializable {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return new ToStringBuilder(this)
                 .append("name", name)

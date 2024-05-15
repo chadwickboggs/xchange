@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS item_tag_xref
 (
     tagName varchar(64),
     itemId  int,
-    primary key (tagName, itemId),
-    foreign key (tagName) references tag (name),
-    foreign key (itemId) references item (id)
+    primary key (tag_name, item_id),
+    foreign key (tag_name) references tag (name),
+    foreign key (item_id) references item (id)
 );
