@@ -23,7 +23,7 @@ public class Item implements Serializable {
     private String name;
     private String description;
     @ManyToMany(
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @JoinTable(
             name = "item_tag_xref",

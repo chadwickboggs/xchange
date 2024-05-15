@@ -73,9 +73,18 @@ public class ItemController {
             return ResponseEntity.ofNullable(null);
         }
 
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"updateItem\""
+        // Verify the referenced owner exists.
+        if (!userController.doesExist(item.getOwner())) {
+            throw new ResponseStatusException(
+                    HttpStatusCode.valueOf(400),
+                    format(
+                            "Invalid owner, owner not found.  Owner: %s", item.getOwner()
+                    )
+            );
+        }
+
+        return ResponseEntity.of(
+                Optional.of(itemRepository.save(item))
         );
     }
 
