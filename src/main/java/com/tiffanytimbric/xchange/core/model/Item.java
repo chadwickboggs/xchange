@@ -25,6 +25,11 @@ public class Item implements Serializable {
     private String name;
     private String description;
     private String photoUrl;
+    @ManyToOne(
+            optional = false, fetch = FetchType.EAGER, cascade = CascadeType.ALL
+    )
+    @JoinColumn(name = "type")
+    private ItemType type;
     @ManyToMany(
             fetch = FetchType.EAGER
     )
@@ -45,6 +50,7 @@ public class Item implements Serializable {
             @NonNull final String name,
             @NonNull final String description,
             @NonNull final String photoUrl,
+            @NonNull final ItemType type,
             @NonNull final Set<Tag> tags,
             final long owner,
             final int price
@@ -53,6 +59,7 @@ public class Item implements Serializable {
         this.name = name;
         this.description = description;
         this.photoUrl = photoUrl;
+        this.type = type;
         this.tags = tags;
         this.owner = owner;
         this.price = price;
@@ -119,6 +126,20 @@ public class Item implements Serializable {
     }
 
     @Nullable
+    public ItemType getType() {
+        return type;
+    }
+
+    @NonNull
+    public Optional<ItemType> typeOpt() {
+        return Optional.ofNullable(type);
+    }
+
+    public void setType(@NonNull final ItemType type) {
+        this.type = type;
+    }
+
+    @Nullable
     public Set<Tag> getTags() {
         return tags;
     }
@@ -169,6 +190,7 @@ public class Item implements Serializable {
                 .append(this.name, rhs.name)
                 .append(this.description, rhs.description)
                 .append(this.photoUrl, rhs.photoUrl)
+                .append(this.type, rhs.type)
                 .append(this.tags, rhs.tags)
                 .append(this.owner, rhs.owner)
                 .append(this.price, rhs.price)
@@ -190,6 +212,7 @@ public class Item implements Serializable {
                 .append("name", name)
                 .append("description", description)
                 .append("photoUrl", photoUrl)
+                .append("type", type)
                 .append("tags", tags)
                 .append("owner", owner)
                 .append("price", price)
