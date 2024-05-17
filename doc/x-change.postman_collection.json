@@ -57,7 +57,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"green\"\n}",
+							"raw": "{\n\t\"name\": \"black\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,6 +321,31 @@
 					"response": []
 				},
 				{
+					"name": "Read By Name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/userByName/Tiffany",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"userByName",
+								"Tiffany"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update",
 					"event": [
 						{
@@ -489,7 +514,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"paint\",\n    \"description\": \"Rainbow interior wall paint.\",\n    \"photoUrl\": \"https://i.pinimg.com/736x/86/33/63/863363ede6741f947b85a32158ce9f7b.jpg\",\n    \"owner\": 1,\n    \"tags\": [\n        {\n            \"name\": \"red\"\n        },\n        {\n            \"name\": \"green\"\n        },\n        {\n            \"name\": \"blue\"\n        }\n    ],\n    \"price\": \"50\"\n}",
+							"raw": "{\n\t\"name\": \"iPhone SE\",\n    \"description\": \"This item is a 2022 iPhone SE.\",\n    \"photoUrl\": \"https://i.pcmag.com/imagery/reviews/06CbOjiKnKQyAK0K6LLTyLM-1..v1647630209.jpg\",\n    \"type\": {\n        \"name\": \"phone\"\n    },\n    \"owner\": 1,\n    \"tags\": [\n        {\n            \"name\": \"black\"\n        }\n    ],\n    \"price\": \"50\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -522,7 +547,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{host}}:{{port}}/item/11",
+							"raw": "http://{{host}}:{{port}}/item/14",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -530,7 +555,32 @@
 							"port": "{{port}}",
 							"path": [
 								"item",
-								"11"
+								"14"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read By Name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/itemByName/paint",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"itemByName",
+								"paint"
 							]
 						}
 					},
@@ -638,7 +688,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://{{host}}:{{port}}/item/10",
+							"raw": "http://{{host}}:{{port}}/item/13",
 							"protocol": "http",
 							"host": [
 								"{{host}}"
@@ -646,7 +696,7 @@
 							"port": "{{port}}",
 							"path": [
 								"item",
-								"10"
+								"13"
 							]
 						},
 						"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."

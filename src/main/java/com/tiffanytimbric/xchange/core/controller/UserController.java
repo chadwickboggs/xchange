@@ -36,6 +36,14 @@ public class UserController {
         );
     }
 
+    @GetMapping("/userByName/{name}")
+    @NonNull
+    public ResponseEntity<User> readUserByName(@PathVariable final String name) {
+        return ResponseEntity.of(
+                userRepository.findByName(name)
+        );
+    }
+
     @PostMapping("/user")
     @NonNull
     public ResponseEntity<User> createUser(@RequestBody @Nullable final User user) {
