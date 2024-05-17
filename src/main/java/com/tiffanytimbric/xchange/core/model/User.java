@@ -1,6 +1,7 @@
 package com.tiffanytimbric.xchange.core.model;
 
 import jakarta.persistence.*;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +10,7 @@ import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -22,6 +24,10 @@ public class User implements Serializable {
     private String name;
     private String photoUrl;
     private int balance;
+    @OneToMany
+    private Set<Item> items;
+    @OneToMany
+    private Set<Want> wants;
 
     public User() {
     }
@@ -30,12 +36,16 @@ public class User implements Serializable {
             @NonNull final Long id,
             @NonNull final String name,
             @NonNull final String photoUrl,
-            final int balance
+            final int balance,
+            @NonNull final Set<Item> items,
+            @NonNull final Set<Want> wants
     ) {
         this.id = id;
         this.name = name;
         this.photoUrl = photoUrl;
         this.balance = balance;
+        this.items = items;
+        this.wants = wants;
     }
 
     @Nullable
@@ -92,6 +102,42 @@ public class User implements Serializable {
         this.balance = balance;
     }
 
+    @Nullable
+    public Set<Item> getItems() {
+        return items;
+    }
+
+    @NonNull
+    public Set<Item> itemsOpt() {
+        if (CollectionUtils.isEmpty(items)) {
+            return Set.of();
+        }
+
+        return items;
+    }
+
+    public void setItems(@NonNull final Set<Item> items) {
+        this.items = items;
+    }
+
+    @Nullable
+    public Set<Want> getWants() {
+        return wants;
+    }
+
+    @NonNull
+    public Set<Want> wantsOpt() {
+        if (CollectionUtils.isEmpty(wants)) {
+            return Set.of();
+        }
+
+        return wants;
+    }
+
+    public void setWants(@NonNull final Set<Want> wants) {
+        this.wants = wants;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -109,6 +155,8 @@ public class User implements Serializable {
                 .append(this.name, rhs.name)
                 .append(this.photoUrl, rhs.photoUrl)
                 .append(this.balance, rhs.balance)
+                .append(this.items, rhs.items)
+                .append(this.wants, rhs.wants)
                 .isEquals();
     }
 
@@ -127,6 +175,8 @@ public class User implements Serializable {
                 .append("name", name)
                 .append("photoUrl", photoUrl)
                 .append("balance", balance)
+                .append("items", items)
+                .append("wants", wants)
                 .toString();
     }
 }
