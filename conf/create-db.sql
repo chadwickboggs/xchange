@@ -8,29 +8,26 @@ CREATE TABLE IF NOT EXISTS tag
 
 CREATE TABLE IF NOT EXISTS item_type
 (
-    name varchar(64),
-    primary key (name)
+    name varchar(64) primary key
 );
 
 CREATE TABLE IF NOT EXISTS user
 (
-    id        int auto_increment,
-    name      varchar(64) not null,
+    id        int auto_increment primary key,
+    name      varchar(64) not null unique,
     photo_url varchar(128),
-    balance   int,
-    primary key (id)
+    balance   int
 );
 
 CREATE TABLE IF NOT EXISTS item
 (
-    id          int auto_increment,
-    name        varchar(64) not null,
+    id          int auto_increment primary key,
+    name        varchar(64) not null unique,
     description text not null,
     photo_url   varchar(128),
     type        varchar(64) not null,
     owner       int,
     price       int,
-    primary key (id),
     foreign key (type) references item_type (name),
     foreign key (owner) references user (id)
 );
