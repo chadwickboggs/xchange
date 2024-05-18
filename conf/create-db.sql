@@ -2,8 +2,16 @@ CREATE DATABASE IF NOT EXISTS xchngdb;
 
 CREATE TABLE IF NOT EXISTS tag
 (
-    name varchar(64),
-    primary key (name)
+    name varchar(64) primary key
+);
+
+CREATE TABLE IF NOT EXISTS trade
+(
+    id          int auto_increment primary key,
+    item_one_id int,
+    item_two_id int,
+    foreign key (item_one_id) references item (id),
+    foreign key (item_two_id) references item (id)
 );
 
 CREATE TABLE IF NOT EXISTS item_type
