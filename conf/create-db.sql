@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS trade
     id          int auto_increment primary key,
     item_one_id int,
     item_two_id int,
-    state       varchar(32) default 'PROPOSED' not null,
+    state       varchar(32) default 'Proposed' not null,
     foreign key (item_one_id) references item (id),
     foreign key (item_two_id) references item (id)
 );
