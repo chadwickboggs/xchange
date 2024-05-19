@@ -3,6 +3,7 @@ package com.tiffanytimbric.xchange.core.controller;
 import com.tiffanytimbric.fsm.FiniteStateMachine;
 import com.tiffanytimbric.xchange.core.model.Trade;
 import com.tiffanytimbric.xchange.core.repository.TradeRepository;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -61,9 +62,9 @@ public class TradeController {
             );
         }
 
-        return ResponseEntity.of(Optional.of(
-                fsm.toJson()
-        ));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8")
+                .body(fsm.toJson());
     }
 
     @PostMapping("/trade")
@@ -105,13 +106,13 @@ public class TradeController {
 
     @DeleteMapping("/trade/{id}")
     @NonNull
-    public ResponseEntity<Trade> deleteTrade(@PathVariable @Nullable final long name) {
-        final Optional<Trade> tradeOpt = tradeRepository.findById(name);
+    public ResponseEntity<Trade> deleteTrade(@PathVariable @Nullable final long id) {
+        final Optional<Trade> tradeOpt = tradeRepository.findById(id);
         if (tradeOpt.isEmpty()) {
             return ResponseEntity.ofNullable(null);
         }
 
-        tradeRepository.deleteById(name);
+        tradeRepository.deleteById(id);
 
         return ResponseEntity.of(tradeOpt);
     }

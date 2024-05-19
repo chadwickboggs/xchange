@@ -1,48 +1,53 @@
 {
   "@class": "com.tiffanytimbric.fsm.FiniteStateMachine",
   "name": "Trade FSM",
-  "dataItem": "fsm_dataItem",
   "ignoreUnknownEvents": true,
   "initialState": {
     "@class": "com.tiffanytimbric.fsm.State",
     "name": "Proposed",
-    "dataItem": "proposed_state_dataItem",
     "transitions": [
       {
         "@class": "com.tiffanytimbric.fsm.Transition",
         "event": {
           "@class": "com.tiffanytimbric.fsm.Event",
-          "name": "Agree",
-          "dataArg": "agree_event_dataArg"
+          "name": "Agree"
         },
         "toState": {
           "@class": "com.tiffanytimbric.fsm.State",
           "name": "Partially_Agreed",
-          "dataItem": "partially_agreed_state_dataItem",
           "transitions": [
             {
               "@class": "com.tiffanytimbric.fsm.Transition",
               "event": {
                 "@class": "com.tiffanytimbric.fsm.Event",
-                "name": "Agree",
-                "dataArg": "agree_event_dataArg"
+                "name": "Agree"
               },
               "toState": {
                 "@class": "com.tiffanytimbric.fsm.State",
                 "name": "Agreed",
-                "dataItem": "agreed_state_dataItem",
                 "transitions": [
                   {
                     "@class": "com.tiffanytimbric.fsm.Transition",
                     "event": {
                       "@class": "com.tiffanytimbric.fsm.Event",
-                      "name": "Receive",
-                      "dataArg": "receive_event_dataArg"
+                      "name": "Receive"
                     },
                     "toState": {
                       "@class": "com.tiffanytimbric.fsm.State",
                       "name": "Partially_Received",
-                      "dataItem": "partially_received_state_dataitem"
+                      "transitions": [
+                        {
+                          "@class": "com.tiffanytimbric.fsm.Transition",
+                          "event": {
+                            "@class": "com.tiffanytimbric.fsm.Event",
+                            "name": "Receive"
+                          },
+                          "toState": {
+                            "@class": "com.tiffanytimbric.fsm.State",
+                            "name": "Complete"
+                          }
+                        }
+                      ]
                     },
                     "toStateName": null
                   }
@@ -54,13 +59,11 @@
               "@class": "com.tiffanytimbric.fsm.Transition",
               "event": {
                 "@class": "com.tiffanytimbric.fsm.Event",
-                "name": "Decline",
-                "dataArg": "decline_event_dataArg"
+                "name": "Decline"
               },
               "toState": {
                 "@class": "com.tiffanytimbric.fsm.State",
-                "name": "Declined",
-                "dataItem": "declined_state_dataItem"
+                "name": "Declined"
               }
             }
           ]
@@ -71,13 +74,11 @@
         "@class": "com.tiffanytimbric.fsm.Transition",
         "event": {
           "@class": "com.tiffanytimbric.fsm.Event",
-          "name": "Decline",
-          "dataArg": "decline_event_dataArg"
+          "name": "Decline"
         },
         "toState": {
           "@class": "com.tiffanytimbric.fsm.State",
-          "name": "Declined",
-          "dataItem": "declined_state_dataItem"
+          "name": "Declined"
         }
       }
     ]
