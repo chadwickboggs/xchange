@@ -1,6 +1,7 @@
 package com.tiffanytimbric.xchange.core.model;
 
 import jakarta.persistence.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,6 +22,7 @@ public class Trade implements Serializable {
     private Item itemOne;
     @ManyToOne
     private Item itemTwo;
+    private String state;
 
     public Trade() {
     }
@@ -28,11 +30,13 @@ public class Trade implements Serializable {
     public Trade(
             @NonNull final Long id,
             @NonNull final Item itemOne,
-            @NonNull final Item itemTwo
+            @NonNull final Item itemTwo,
+            @NonNull final String state
     ) {
         this.id = id;
         this.itemOne = itemOne;
         this.itemTwo = itemTwo;
+        this.state = state;
     }
 
     @Nullable
@@ -113,5 +117,23 @@ public class Trade implements Serializable {
                 .append("itemOne", itemOne)
                 .append("itemTwo", itemTwo)
                 .toString();
+    }
+
+    @Nullable
+    public String getState() {
+        return state;
+    }
+
+    @NonNull
+    public Optional<String> stateOpt() {
+        if (StringUtils.isBlank(state)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(state);
+    }
+
+    public void setState(@NonNull final String state) {
+        this.state = state;
     }
 }
