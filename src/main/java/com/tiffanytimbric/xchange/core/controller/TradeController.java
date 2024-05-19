@@ -47,10 +47,12 @@ public class TradeController {
     @NonNull
     public ResponseEntity<String> readTradeFsm() {
         final FiniteStateMachine<String> fsm;
-        try (BufferedReader fsmReader =
-                new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(
-                        TRADE_FSM_JSON_DEFINITION_FILENAME
-        )))) {
+        try (
+                BufferedReader fsmReader =
+                        new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(
+                                TRADE_FSM_JSON_DEFINITION_FILENAME
+                        )))
+        ) {
             fsm = FiniteStateMachine.fromJson(
                     fsmReader.lines().collect(Collectors.joining( "\n"))
             );
