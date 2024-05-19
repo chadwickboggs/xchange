@@ -1019,6 +1019,30 @@
 					"response": []
 				},
 				{
+					"name": "Read Trade FSM",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/tradeFSM",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"tradeFSM"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update",
 					"event": [
 						{

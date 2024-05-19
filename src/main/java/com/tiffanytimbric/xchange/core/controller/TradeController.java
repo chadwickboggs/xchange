@@ -1,5 +1,6 @@
 package com.tiffanytimbric.xchange.core.controller;
 
+import com.tiffanytimbric.fsm.FiniteStateMachine;
 import com.tiffanytimbric.xchange.core.model.Trade;
 import com.tiffanytimbric.xchange.core.repository.TradeRepository;
 import org.springframework.http.HttpStatusCode;
@@ -9,11 +10,16 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class TradeController {
 
+    public static final String TRADE_FSM_JSON_DEFINITION_FILENAME = "fsm-trade.json";
     private final TradeRepository tradeRepository;
 
     public TradeController(
@@ -34,6 +40,30 @@ public class TradeController {
         return ResponseEntity.of(
                 tradeRepository.findById(id)
         );
+    }
+
+    @GetMapping("/tradeFSM")
+    @NonNull
+    public ResponseEntity<String> readTradeFsm() {
+        final FiniteStateMachine<String> fsm;
+        try (BufferedReader fsmReader =
+                new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(
+                        TRADE_FSM_JSON_DEFINITION_FILENAME
+        )))) {
+            fsm = FiniteStateMachine.fromJson(
+                    fsmReader.lines().collect(Collectors.joining( "\n"))
+            );
+        }
+        catch (IOException e) {
+            throw new ResponseStatusException(
+                    HttpStatusCode.valueOf(500),
+                    "Excepiton reading Trade Finite State Machine definition: " + e.getMessage()
+            );
+        }
+
+        return ResponseEntity.of(Optional.of(
+                fsm.toJson()
+        ));
     }
 
     @PostMapping("/trade")
