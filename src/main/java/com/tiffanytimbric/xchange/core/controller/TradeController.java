@@ -3,6 +3,7 @@ package com.tiffanytimbric.xchange.core.controller;
 import com.tiffanytimbric.fsm.FiniteStateMachine;
 import com.tiffanytimbric.xchange.core.model.Trade;
 import com.tiffanytimbric.xchange.core.repository.TradeRepository;
+import com.tiffanytimbric.xchange.core.service.TradeService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -11,16 +12,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 public class TradeController {
 
-    public static final String TRADE_FSM_JSON_DEFINITION_FILENAME = "fsm-trade.json";
     private final TradeRepository tradeRepository;
 
     public TradeController(
@@ -46,26 +42,12 @@ public class TradeController {
     @GetMapping("/tradeFSM")
     @NonNull
     public ResponseEntity<String> readTradeFsm() {
-        final FiniteStateMachine<String> fsm;
-        try (
-                BufferedReader fsmReader =
-                        new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(
-                                TRADE_FSM_JSON_DEFINITION_FILENAME
-                        )))
-        ) {
-            fsm = FiniteStateMachine.fromJson(
-                    fsmReader.lines().collect(Collectors.joining( "\n"))
-            );
-        }
-        catch (IOException e) {
-            throw new ResponseStatusException(
-                    HttpStatusCode.valueOf(500),
-                    "Excepiton reading Trade Finite State Machine definition: " + e.getMessage()
-            );
-        }
+        final FiniteStateMachine fsm = TradeService.newTradeFsm();
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8")
+                .header(
+                        HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8"
+                )
                 .body(fsm.toJson());
     }
 

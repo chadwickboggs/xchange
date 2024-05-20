@@ -1,51 +1,200 @@
 {
   "@class": "com.tiffanytimbric.fsm.FiniteStateMachine",
   "name": "Trade FSM",
+  "dataItem": null,
   "ignoreUnknownEvents": true,
   "initialState": {
     "@class": "com.tiffanytimbric.fsm.State",
     "name": "Proposed",
+    "dataItem": null,
     "transitions": [
       {
         "@class": "com.tiffanytimbric.fsm.Transition",
         "event": {
           "@class": "com.tiffanytimbric.fsm.Event",
-          "name": "Agree"
+          "name": "Decline",
+          "dataArg": null
         },
         "toState": {
           "@class": "com.tiffanytimbric.fsm.State",
-          "name": "Partially_Agreed",
+          "name": "Declined",
+          "dataItem": null,
+          "transitions": []
+        },
+        "toStateName": null
+      },
+      {
+        "@class": "com.tiffanytimbric.fsm.Transition",
+        "event": {
+          "@class": "com.tiffanytimbric.fsm.Event",
+          "name": "Accept",
+          "dataArg": null
+        },
+        "toState": {
+          "@class": "com.tiffanytimbric.fsm.State",
+          "name": "Partially Accepted",
+          "dataItem": null,
           "transitions": [
             {
               "@class": "com.tiffanytimbric.fsm.Transition",
               "event": {
                 "@class": "com.tiffanytimbric.fsm.Event",
-                "name": "Agree"
+                "name": "Decline",
+                "dataArg": null
               },
               "toState": {
                 "@class": "com.tiffanytimbric.fsm.State",
-                "name": "Agreed",
+                "name": "Declined",
+                "dataItem": null,
+                "transitions": []
+              },
+              "toStateName": null
+            },
+            {
+              "@class": "com.tiffanytimbric.fsm.Transition",
+              "event": {
+                "@class": "com.tiffanytimbric.fsm.Event",
+                "name": "Accept",
+                "dataArg": null
+              },
+              "toState": {
+                "@class": "com.tiffanytimbric.fsm.State",
+                "name": "Accepted",
+                "dataItem": null,
                 "transitions": [
                   {
                     "@class": "com.tiffanytimbric.fsm.Transition",
                     "event": {
                       "@class": "com.tiffanytimbric.fsm.Event",
-                      "name": "Receive"
+                      "name": "Abandon",
+                      "dataArg": null
                     },
                     "toState": {
                       "@class": "com.tiffanytimbric.fsm.State",
-                      "name": "Partially_Received",
+                      "name": "Abandoned",
+                      "dataItem": null,
+                      "transitions": []
+                    },
+                    "toStateName": null
+                  },
+                  {
+                    "@class": "com.tiffanytimbric.fsm.Transition",
+                    "event": {
+                      "@class": "com.tiffanytimbric.fsm.Event",
+                      "name": "Recieve",
+                      "dataArg": null
+                    },
+                    "toState": {
+                      "@class": "com.tiffanytimbric.fsm.State",
+                      "name": "Partially Received",
+                      "dataItem": null,
                       "transitions": [
                         {
                           "@class": "com.tiffanytimbric.fsm.Transition",
                           "event": {
                             "@class": "com.tiffanytimbric.fsm.Event",
-                            "name": "Receive"
+                            "name": "Abandon",
+                            "dataArg": null
                           },
                           "toState": {
                             "@class": "com.tiffanytimbric.fsm.State",
-                            "name": "Complete"
-                          }
+                            "name": "Abandoned",
+                            "dataItem": null,
+                            "transitions": []
+                          },
+                          "toStateName": null
+                        },
+                        {
+                          "@class": "com.tiffanytimbric.fsm.Transition",
+                          "event": {
+                            "@class": "com.tiffanytimbric.fsm.Event",
+                            "name": "Recieve",
+                            "dataArg": null
+                          },
+                          "toState": {
+                            "@class": "com.tiffanytimbric.fsm.State",
+                            "name": "Received",
+                            "dataItem": null,
+                            "transitions": [
+                              {
+                                "@class": "com.tiffanytimbric.fsm.Transition",
+                                "event": {
+                                  "@class": "com.tiffanytimbric.fsm.Event",
+                                  "name": "Fail",
+                                  "dataArg": null
+                                },
+                                "toState": {
+                                  "@class": "com.tiffanytimbric.fsm.State",
+                                  "name": "Failed",
+                                  "dataItem": null,
+                                  "transitions": []
+                                },
+                                "toStateName": null
+                              },
+                              {
+                                "@class": "com.tiffanytimbric.fsm.Transition",
+                                "event": {
+                                  "@class": "com.tiffanytimbric.fsm.Event",
+                                  "name": "Complete",
+                                  "dataArg": null
+                                },
+                                "toState": {
+                                  "@class": "com.tiffanytimbric.fsm.State",
+                                  "name": "Partially Completed",
+                                  "dataItem": null,
+                                  "transitions": [
+                                    {
+                                      "@class": "com.tiffanytimbric.fsm.Transition",
+                                      "event": {
+                                        "@class": "com.tiffanytimbric.fsm.Event",
+                                        "name": "Complete",
+                                        "dataArg": null
+                                      },
+                                      "toState": {
+                                        "@class": "com.tiffanytimbric.fsm.State",
+                                        "name": "Completed",
+                                        "dataItem": null,
+                                        "transitions": []
+                                      },
+                                      "toStateName": null
+                                    },
+                                    {
+                                      "@class": "com.tiffanytimbric.fsm.Transition",
+                                      "event": {
+                                        "@class": "com.tiffanytimbric.fsm.Event",
+                                        "name": "Abandon",
+                                        "dataArg": null
+                                      },
+                                      "toState": {
+                                        "@class": "com.tiffanytimbric.fsm.State",
+                                        "name": "Abandoned",
+                                        "dataItem": null,
+                                        "transitions": []
+                                      },
+                                      "toStateName": null
+                                    },
+                                    {
+                                      "@class": "com.tiffanytimbric.fsm.Transition",
+                                      "event": {
+                                        "@class": "com.tiffanytimbric.fsm.Event",
+                                        "name": "Fail",
+                                        "dataArg": null
+                                      },
+                                      "toState": {
+                                        "@class": "com.tiffanytimbric.fsm.State",
+                                        "name": "Failed",
+                                        "dataItem": null,
+                                        "transitions": []
+                                      },
+                                      "toStateName": null
+                                    }
+                                  ]
+                                },
+                                "toStateName": null
+                              }
+                            ]
+                          },
+                          "toStateName": null
                         }
                       ]
                     },
@@ -54,32 +203,10 @@
                 ]
               },
               "toStateName": null
-            },
-            {
-              "@class": "com.tiffanytimbric.fsm.Transition",
-              "event": {
-                "@class": "com.tiffanytimbric.fsm.Event",
-                "name": "Decline"
-              },
-              "toState": {
-                "@class": "com.tiffanytimbric.fsm.State",
-                "name": "Declined"
-              }
             }
           ]
         },
         "toStateName": null
-      },
-      {
-        "@class": "com.tiffanytimbric.fsm.Transition",
-        "event": {
-          "@class": "com.tiffanytimbric.fsm.Event",
-          "name": "Decline"
-        },
-        "toState": {
-          "@class": "com.tiffanytimbric.fsm.State",
-          "name": "Declined"
-        }
       }
     ]
   }
