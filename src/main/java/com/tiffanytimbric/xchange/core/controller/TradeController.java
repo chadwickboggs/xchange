@@ -39,6 +39,91 @@ public class TradeController {
         );
     }
 
+    @GetMapping("/acceptTrade/{tradeId}/{userId}")
+    @NonNull
+    public ResponseEntity<String> acceptTrade(
+            final long tradeId,
+            final long userId
+    ) {
+        // TODO: Implement.
+
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"acceptTrade\""
+        );
+    }
+
+    @GetMapping("/receiveTrade/{tradeId}/{userId}")
+    @NonNull
+    public ResponseEntity<String> receiveTrade(
+            final long tradeId,
+            final long userId
+    ) {
+        // TODO: Implement.
+
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"receiveTrade\""
+        );
+    }
+
+    @GetMapping("/abandonTrade/{tradeId}/{userId}")
+    @NonNull
+    public ResponseEntity<String> abandonTrade(
+            final long tradeId,
+            final long userId
+    ) {
+        // TODO: Implement.
+
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"abandonTrade\""
+        );
+    }
+
+    @GetMapping("/completeTrade/{tradeId}/{userId}")
+    @NonNull
+    public ResponseEntity<String> completeTrade(
+            final long tradeId,
+            final long userId
+    ) {
+        // TODO: Implement.
+
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"completeTrade\""
+        );
+    }
+
+    @GetMapping("/failTrade/{tradeId}/{userId}")
+    @NonNull
+    public ResponseEntity<String> failTrade(
+            final long tradeId,
+            final long userId,
+            @Nullable final String reason
+    ) {
+        // TODO: Implement.
+
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"failTrade\""
+        );
+    }
+
+    @GetMapping("/tradeDecline/{tradeId}/{userId}")
+    @NonNull
+    public ResponseEntity<String> declineTrade(
+            final long tradeId,
+            final long userId
+    ) {
+        // TODO: Implement.
+
+        throw new ResponseStatusException(
+                HttpStatusCode.valueOf(400),
+                "Invalid method, method not implemented.  Method Name: \"declineTrade\""
+        );
+    }
+
     @GetMapping("/tradeFSM")
     @NonNull
     public ResponseEntity<String> readTradeFsm() {
