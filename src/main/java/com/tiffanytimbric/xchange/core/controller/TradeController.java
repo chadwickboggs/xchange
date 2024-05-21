@@ -27,13 +27,13 @@ public class TradeController {
 
     @GetMapping("/tradeExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable @Nullable final long id) {
+    public boolean doesExist(@PathVariable final long id) {
         return tradeRepository.existsById(id);
     }
 
     @GetMapping("/trade/{id}")
     @NonNull
-    public ResponseEntity<Trade> readTrade(@PathVariable @Nullable final long id) {
+    public ResponseEntity<Trade> readTrade(@PathVariable final long id) {
         return ResponseEntity.of(
                 tradeRepository.findById(id)
         );
@@ -42,8 +42,8 @@ public class TradeController {
     @GetMapping("/acceptTrade/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<String> acceptTrade(
-            final long tradeId,
-            final long userId
+            @PathVariable final long tradeId,
+            @PathVariable final long userId
     ) {
         // TODO: Implement.
 
@@ -56,8 +56,8 @@ public class TradeController {
     @GetMapping("/receiveTrade/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<String> receiveTrade(
-            final long tradeId,
-            final long userId
+            @PathVariable final long tradeId,
+            @PathVariable final long userId
     ) {
         // TODO: Implement.
 
@@ -67,11 +67,12 @@ public class TradeController {
         );
     }
 
-    @GetMapping("/abandonTrade/{tradeId}/{userId}")
+    @PostMapping("/abandonTrade/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<String> abandonTrade(
-            final long tradeId,
-            final long userId
+            @PathVariable final long tradeId,
+            @PathVariable final long userId,
+            @RequestBody @Nullable final String reason
     ) {
         // TODO: Implement.
 
@@ -84,8 +85,8 @@ public class TradeController {
     @GetMapping("/completeTrade/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<String> completeTrade(
-            final long tradeId,
-            final long userId
+            @PathVariable final long tradeId,
+            @PathVariable final long userId
     ) {
         // TODO: Implement.
 
@@ -95,12 +96,12 @@ public class TradeController {
         );
     }
 
-    @GetMapping("/failTrade/{tradeId}/{userId}")
+    @PostMapping("/failTrade/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<String> failTrade(
-            final long tradeId,
-            final long userId,
-            @Nullable final String reason
+            @PathVariable final long tradeId,
+            @PathVariable final long userId,
+            @RequestBody @Nullable final String reason
     ) {
         // TODO: Implement.
 
@@ -113,8 +114,8 @@ public class TradeController {
     @GetMapping("/tradeDecline/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<String> declineTrade(
-            final long tradeId,
-            final long userId
+            @PathVariable final long tradeId,
+            @PathVariable final long userId
     ) {
         // TODO: Implement.
 
@@ -175,7 +176,7 @@ public class TradeController {
 
     @DeleteMapping("/trade/{id}")
     @NonNull
-    public ResponseEntity<Trade> deleteTrade(@PathVariable @Nullable final long id) {
+    public ResponseEntity<Trade> deleteTrade(@PathVariable final long id) {
         final Optional<Trade> tradeOpt = tradeRepository.findById(id);
         if (tradeOpt.isEmpty()) {
             return ResponseEntity.ofNullable(null);
