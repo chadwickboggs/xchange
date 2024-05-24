@@ -5,7 +5,9 @@ import com.tiffanytimbric.fsm.FiniteStateMachine;
 import com.tiffanytimbric.fsm.State;
 import com.tiffanytimbric.fsm.Transition;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TradeService {
 
     @NonNull

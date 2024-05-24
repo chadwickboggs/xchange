@@ -2,27 +2,37 @@ package com.tiffanytimbric.xchange.core.controller;
 
 import com.tiffanytimbric.fsm.FiniteStateMachine;
 import com.tiffanytimbric.xchange.core.model.Trade;
+import com.tiffanytimbric.xchange.core.model.User;
 import com.tiffanytimbric.xchange.core.repository.TradeRepository;
+import com.tiffanytimbric.xchange.core.repository.UserRepository;
 import com.tiffanytimbric.xchange.core.service.TradeService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @RestController
 public class TradeController {
 
     private final TradeRepository tradeRepository;
+    private final UserRepository userRepository;
 
     public TradeController(
-            @NonNull final TradeRepository tradeRepository
+            @NonNull final TradeRepository tradeRepository,
+            @NonNull final UserRepository userRepository
     ) {
         this.tradeRepository = tradeRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/tradeExist/{id}")
@@ -32,14 +42,50 @@ public class TradeController {
     }
 
     @GetMapping("/trade/{id}")
+    @RolesAllowed({"ADMIN", "USER"})
     @NonNull
     public ResponseEntity<Trade> readTrade(@PathVariable final long id) {
-        return ResponseEntity.of(
-                tradeRepository.findById(id)
-        );
+        final Optional<Trade> tradeOpt = tradeRepository.findById(id);
+        if (tradeOpt.isEmpty()) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
+        final String username = String.valueOf(authentication.getPrincipal());
+        if (isBlank(username)) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
+        final Optional<User> userRequestingOpt = userRepository.findByName(username);
+        if (userRequestingOpt.isEmpty()) {
+            return ResponseEntity.of(Optional.empty());
+        }
+        final User userRequesting = userRequestingOpt.get();
+
+        final Trade trade = tradeOpt.get();
+        final boolean doesRequestingUserOwnItemOne = trade.itemOneOpt()
+                .map(itemOne ->
+                        itemOne.getOwner() == userRequesting.getId()
+                ).orElse(false);
+        final boolean doesRequestingUserOwnItemTwo = trade.itemTwoOpt()
+                .map(itemTwo ->
+                        itemTwo.getOwner() == userRequesting.getId()
+                ).orElse(false);
+
+        if (!doesRequestingUserOwnItemOne || !doesRequestingUserOwnItemTwo) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
+        return ResponseEntity.of(tradeOpt);
     }
 
     @GetMapping("/acceptTrade/{tradeId}/{userId}")
+//    @PreAuthorize("hasAnyAuthority('USER')")
+    @RolesAllowed({"ADMIN", "USER"})
     @NonNull
     public ResponseEntity<String> acceptTrade(
             @PathVariable final long tradeId,
