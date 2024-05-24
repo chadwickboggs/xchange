@@ -3,7 +3,7 @@ package com.tiffanytimbric.xchange.core.controller;
 import com.tiffanytimbric.fsm.FiniteStateMachine;
 import com.tiffanytimbric.xchange.core.model.Trade;
 import com.tiffanytimbric.xchange.core.repository.TradeRepository;
-import com.tiffanytimbric.xchange.core.service.TradeService;
+import com.tiffanytimbric.xchange.core.service.TradeUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -41,94 +41,88 @@ public class TradeController {
 
     @GetMapping("/acceptTrade/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<String> acceptTrade(
+    public ResponseEntity<Trade> acceptTrade(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
-        // TODO: Implement.
-
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"acceptTrade\""
+        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+                "Accept", tradeId, userId
         );
+
+        return ResponseEntity.of(tradeOpt);
     }
 
     @GetMapping("/receiveTrade/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<String> receiveTrade(
+    public ResponseEntity<Trade> receiveTrade(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
-        // TODO: Implement.
-
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"receiveTrade\""
+        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+                "Receive", tradeId, userId
         );
+
+        return ResponseEntity.of(tradeOpt);
     }
 
     @PostMapping("/abandonTrade/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<String> abandonTrade(
+    public ResponseEntity<Trade> abandonTrade(
             @PathVariable final long tradeId,
             @PathVariable final long userId,
             @RequestBody @Nullable final String reason
     ) {
-        // TODO: Implement.
-
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"abandonTrade\""
+        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+                "Abandon", tradeId, userId
         );
+
+        return ResponseEntity.of(tradeOpt);
     }
 
     @GetMapping("/completeTrade/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<String> completeTrade(
+    public ResponseEntity<Trade> completeTrade(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
-        // TODO: Implement.
-
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"completeTrade\""
+        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+                "Complete", tradeId, userId
         );
+
+        return ResponseEntity.of(tradeOpt);
     }
 
     @PostMapping("/failTrade/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<String> failTrade(
+    public ResponseEntity<Trade> failTrade(
             @PathVariable final long tradeId,
             @PathVariable final long userId,
             @RequestBody @Nullable final String reason
     ) {
-        // TODO: Implement.
-
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"failTrade\""
+        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+                "Fail", tradeId, userId
         );
+
+        return ResponseEntity.of(tradeOpt);
     }
 
     @GetMapping("/tradeDecline/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<String> declineTrade(
+    public ResponseEntity<Trade> declineTrade(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
-        // TODO: Implement.
-
-        throw new ResponseStatusException(
-                HttpStatusCode.valueOf(400),
-                "Invalid method, method not implemented.  Method Name: \"declineTrade\""
+        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+                "Decline", tradeId, userId
         );
+
+        return ResponseEntity.of(tradeOpt);
     }
 
     @GetMapping("/tradeFSM")
     @NonNull
     public ResponseEntity<String> readTradeFsm() {
-        final FiniteStateMachine fsm = TradeService.newTradeFsm();
+        final FiniteStateMachine fsm = TradeUtil.newTradeFsm();
 
         return ResponseEntity.ok()
                 .header(
@@ -185,6 +179,29 @@ public class TradeController {
         tradeRepository.deleteById(id);
 
         return ResponseEntity.of(tradeOpt);
+    }
+
+    private FiniteStateMachine getTradeFsm(long tradeId) {
+        // TODO: Implement.
+
+        return TradeUtil.newTradeFsm();
+    }
+
+    @NonNull
+    private Optional<Trade> handleTradeEvent(
+            @NonNull final String eventName,
+            long tradeId,
+            long userId
+    ) {
+        if (!tradeRepository.existsById(tradeId)) {
+            return Optional.empty();
+        }
+
+        // TODO: Add `userId` to event data.
+
+        getTradeFsm(tradeId).handleEvent(eventName);
+
+        return tradeRepository.findById(tradeId);
     }
 
 }
