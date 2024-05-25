@@ -994,7 +994,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"item_one_id\": 1,\n    \"item_two_id\": 2\n}",
+									"raw": "{\n    \"item_one_id\": 5,\n    \"item_two_id\": 6\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1364,6 +1364,79 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "Tiffany",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/login",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "Tiffany",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/logout",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [

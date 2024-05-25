@@ -1,6 +1,7 @@
 package com.tiffanytimbric.xchange.core.controller;
 
 import com.tiffanytimbric.fsm.FiniteStateMachine;
+import com.tiffanytimbric.fsm.State;
 import com.tiffanytimbric.xchange.core.model.Trade;
 import com.tiffanytimbric.xchange.core.repository.TradeRepository;
 import com.tiffanytimbric.xchange.core.service.TradeUtil;
@@ -39,9 +40,9 @@ public class TradeController {
         );
     }
 
-    @GetMapping("/acceptTrade/{tradeId}/{userId}")
+    @GetMapping("/tradeAccept/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<Trade> acceptTrade(
+    public ResponseEntity<Trade> tradeAccept(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
@@ -52,9 +53,9 @@ public class TradeController {
         return ResponseEntity.of(tradeOpt);
     }
 
-    @GetMapping("/receiveTrade/{tradeId}/{userId}")
+    @GetMapping("/tradeReceive/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<Trade> receiveTrade(
+    public ResponseEntity<Trade> tradeReceive(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
@@ -65,9 +66,9 @@ public class TradeController {
         return ResponseEntity.of(tradeOpt);
     }
 
-    @PostMapping("/abandonTrade/{tradeId}/{userId}")
+    @PostMapping("/tradeAbandon/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<Trade> abandonTrade(
+    public ResponseEntity<Trade> tradeAbandon(
             @PathVariable final long tradeId,
             @PathVariable final long userId,
             @RequestBody @Nullable final String reason
@@ -79,9 +80,9 @@ public class TradeController {
         return ResponseEntity.of(tradeOpt);
     }
 
-    @GetMapping("/completeTrade/{tradeId}/{userId}")
+    @GetMapping("/tradeComplete/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<Trade> completeTrade(
+    public ResponseEntity<Trade> tradeComplete(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
@@ -92,9 +93,9 @@ public class TradeController {
         return ResponseEntity.of(tradeOpt);
     }
 
-    @PostMapping("/failTrade/{tradeId}/{userId}")
+    @PostMapping("/tradeFail/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<Trade> failTrade(
+    public ResponseEntity<Trade> tradeFail(
             @PathVariable final long tradeId,
             @PathVariable final long userId,
             @RequestBody @Nullable final String reason
@@ -108,7 +109,7 @@ public class TradeController {
 
     @GetMapping("/tradeDecline/{tradeId}/{userId}")
     @NonNull
-    public ResponseEntity<Trade> declineTrade(
+    public ResponseEntity<Trade> tradeDecline(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
@@ -199,9 +200,20 @@ public class TradeController {
 
         // TODO: Add `userId` to event data.
 
-        getTradeFsm(tradeId).handleEvent(eventName);
+        final Optional<Trade> tradeOpt = tradeRepository.findById(tradeId);
+        if (tradeOpt.isEmpty()) {
+            return tradeOpt;
+        }
+        final Trade trade = tradeOpt.get();
 
-        return tradeRepository.findById(tradeId);
+        final State toState = getTradeFsm(tradeId).handleEvent(eventName);
+        trade.setState(
+                toState.name()
+        );
+
+        final Trade tradeSaved = tradeRepository.save(trade);
+
+        return Optional.of(tradeSaved);
     }
 
 }

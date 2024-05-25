@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS tag
 CREATE TABLE IF NOT EXISTS trade
 (
     id          int auto_increment primary key,
-    item_one_id int,
-    item_two_id int,
+    item_one_id int                            not null,
+    item_two_id int                            not null,
     state       varchar(32) default 'Proposed' not null,
     foreign key (item_one_id) references item (id),
     foreign key (item_two_id) references item (id)
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS user
     id        int auto_increment primary key,
     name      varchar(64) not null unique,
     photo_url varchar(128),
-    balance   int
+    balance   int         not null default 0
 );
 
 CREATE TABLE IF NOT EXISTS item
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS item
     description text        not null,
     photo_url   varchar(128),
     type        varchar(64) not null,
-    owner       int,
+    owner       int         not null,
     price       int,
     index (name),
     foreign key (type) references item_type (name),
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS want
     name        varchar(64) not null,
     description text        not null,
     type        varchar(64) not null,
-    user        int,
+    user        int         not null,
     price       int,
     index (name),
     foreign key (type) references item_type (name),
@@ -57,8 +57,8 @@ CREATE TABLE IF NOT EXISTS want
 
 CREATE TABLE IF NOT EXISTS item_tag_xref
 (
-    tag_name varchar(64),
-    item_id  int,
+    tag_name varchar(64) not null,
+    item_id  int         not null,
     primary key (tag_name, item_id),
     foreign key (tag_name) references tag (name),
     foreign key (item_id) references item (id)
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS item_tag_xref
 
 CREATE TABLE IF NOT EXISTS want_tag_xref
 (
-    tag_name varchar(64),
-    want_id  int,
+    tag_name varchar(64) not null,
+    want_id  int         not null,
     primary key (tag_name, want_id),
     foreign key (tag_name) references tag (name),
     foreign key (want_id) references item (id)

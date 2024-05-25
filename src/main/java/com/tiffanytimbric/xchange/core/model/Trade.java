@@ -1,5 +1,6 @@
 package com.tiffanytimbric.xchange.core.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -18,24 +19,34 @@ public class Trade implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Item itemOne;
-    @ManyToOne
-    private Item itemTwo;
-    private String state;
+    @JoinColumn(
+            name = "item_one_id",
+            nullable = false,
+            referencedColumnName = "id"
+    )
+    @JsonProperty("item_one_id")
+    private int itemOneId;
+    @JoinColumn(
+            name = "item_two_id",
+            nullable = false,
+            referencedColumnName = "id"
+    )
+    @JsonProperty("item_two_id")
+    private int itemTwoId;
+    private String state = "Proposed";
 
     public Trade() {
     }
 
     public Trade(
             @NonNull final Long id,
-            @NonNull final Item itemOne,
-            @NonNull final Item itemTwo,
+            @NonNull final int itemOneId,
+            @NonNull final int itemTwoId,
             @NonNull final String state
     ) {
         this.id = id;
-        this.itemOne = itemOne;
-        this.itemTwo = itemTwo;
+        this.itemOneId = itemOneId;
+        this.itemTwoId = itemTwoId;
         this.state = state;
     }
 
@@ -45,31 +56,21 @@ public class Trade implements Serializable {
     }
 
     @Nullable
-    public Item getItemOne() {
-        return itemOne;
+    public int getItemOneId() {
+        return itemOneId;
     }
 
-    @NonNull
-    public Optional<Item> itemOneOpt() {
-        return Optional.ofNullable(itemOne);
-    }
-
-    public void setItemOne(@NonNull final Item itemOne) {
-        this.itemOne = itemOne;
+    public void setItemOneId(@NonNull final int itemOneId) {
+        this.itemOneId = itemOneId;
     }
 
     @Nullable
-    public Item getItemTwo() {
-        return itemTwo;
+    public int getItemTwoId() {
+        return itemTwoId;
     }
 
-    @NonNull
-    public Optional<Item> itemTwoOpt() {
-        return Optional.ofNullable(itemTwo);
-    }
-
-    public void setItemTwo(@NonNull final Item itemTwo) {
-        this.itemTwo = itemTwo;
+    public void setItemTwoId(@NonNull final int itemTwoId) {
+        this.itemTwoId = itemTwoId;
     }
 
     @NonNull
@@ -95,8 +96,8 @@ public class Trade implements Serializable {
         Trade rhs = (Trade) obj;
         return new EqualsBuilder()
                 .append(this.id, rhs.id)
-                .append(this.itemOne, rhs.itemOne)
-                .append(this.itemTwo, rhs.itemTwo)
+                .append(this.itemOneId, rhs.itemOneId)
+                .append(this.itemTwoId, rhs.itemTwoId)
                 .isEquals();
     }
 
@@ -104,8 +105,8 @@ public class Trade implements Serializable {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(id)
-                .append(itemOne)
-                .append(itemTwo)
+                .append(itemOneId)
+                .append(itemTwoId)
                 .toHashCode();
     }
 
@@ -114,8 +115,8 @@ public class Trade implements Serializable {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
-                .append("itemOne", itemOne)
-                .append("itemTwo", itemTwo)
+                .append("itemOne", itemOneId)
+                .append("itemTwo", itemTwoId)
                 .toString();
     }
 
