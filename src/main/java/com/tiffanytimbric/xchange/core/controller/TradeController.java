@@ -182,10 +182,20 @@ public class TradeController {
         return ResponseEntity.of(tradeOpt);
     }
 
-    private FiniteStateMachine getTradeFsm(long tradeId) {
-        // TODO: Implement.
+    @NonNull
+    private FiniteStateMachine getTradeFsm(
+            @Nullable final Trade trade
+    ) {
+        final FiniteStateMachine fsm = TradeUtil.newTradeFsm();
+        if (trade == null) {
+            return fsm;
+        }
 
-        return TradeUtil.newTradeFsm();
+        fsm.findState(trade.getState()).ifPresent(currentState ->
+                fsm.setCurrentState((State) currentState)
+        );
+
+        return fsm;
     }
 
     @NonNull
@@ -206,7 +216,11 @@ public class TradeController {
         }
         final Trade trade = tradeOpt.get();
 
-        final State toState = getTradeFsm(tradeId).handleEvent(eventName);
+        final State toState = getTradeFsm(trade).handleEvent(eventName);
+        if (trade.getState().equals(toState)) {
+            return Optional.of(trade);
+        }
+
         trade.setState(
                 toState.name()
         );

@@ -30,15 +30,15 @@ public class TradeUtil {
                 "Partially Completed", null,
                 new Transition(
                         new Event("Complete", null),
-                        completedEndState, null
+                        null, completedEndState, null
                 ),
                 new Transition(
                         new Event("Abandon", null),
-                        abandonedEndState, null
+                        null, abandonedEndState, null
                 ),
                 new Transition(
                         new Event("Fail", null),
-                        failedEndState, null
+                        null, failedEndState, null
                 )
         );
 
@@ -46,11 +46,11 @@ public class TradeUtil {
                 "Received", null,
                 new Transition(
                         new Event("Fail", null),
-                        failedEndState, null
+                        null, failedEndState, null
                 ),
                 new Transition(
                         new Event("Complete", null),
-                        partiallyCompletedState, null
+                        null, partiallyCompletedState, null
                 )
         );
 
@@ -58,11 +58,11 @@ public class TradeUtil {
                 "Partially Received", null,
                 new Transition(
                         new Event("Abandon", null),
-                        abandonedEndState, null
+                        null, abandonedEndState, null
                 ),
                 new Transition(
                         new Event("Recieve", null),
-                        receivedState, null
+                        null, receivedState, null
                 )
         );
 
@@ -70,11 +70,11 @@ public class TradeUtil {
                 "Accepted", null,
                 new Transition(
                         new Event("Abandon", null),
-                        abandonedEndState, null
+                        null, abandonedEndState, null
                 ),
                 new Transition(
                         new Event("Recieve", null),
-                        partiallyReceivedState, null
+                        null, partiallyReceivedState, null
                 )
         );
 
@@ -82,11 +82,11 @@ public class TradeUtil {
                 "Partially Accepted", null,
                 new Transition(
                         new Event("Decline", null),
-                        declinedStateEndState, null
+                        null, declinedStateEndState, null
                 ),
                 new Transition(
                         new Event("Accept", null),
-                        acceptedState, null
+                        null, acceptedState, null
                 )
         );
 
@@ -94,11 +94,11 @@ public class TradeUtil {
                 "Proposed", null,
                 new Transition(
                         new Event("Decline", null),
-                        declinedStateEndState, null
+                        null, declinedStateEndState, null
                 ),
                 new Transition(
                         new Event("Accept", null),
-                        partiallyAcceptedState, null
+                        null, partiallyAcceptedState, null
                 )
         );
 
