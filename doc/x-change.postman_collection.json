@@ -1066,6 +1066,56 @@
 							"response": []
 						},
 						{
+							"name": "Read FSM State",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://{{host}}:{{port}}/tradeFsmState/1",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"tradeFsmState",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read FSM Events",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "http://{{host}}:{{port}}/tradeFsmEvents/1",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"tradeFsmEvents",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Update",
 							"event": [
 								{

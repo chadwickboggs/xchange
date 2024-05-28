@@ -1,10 +1,13 @@
 package com.tiffanytimbric.xchange.core.controller;
 
+import com.tiffanytimbric.fsm.Event;
 import com.tiffanytimbric.fsm.FiniteStateMachine;
 import com.tiffanytimbric.fsm.State;
+import com.tiffanytimbric.fsm.Transition;
 import com.tiffanytimbric.xchange.core.model.Trade;
 import com.tiffanytimbric.xchange.core.repository.TradeRepository;
 import com.tiffanytimbric.xchange.core.service.TradeUtil;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -40,13 +45,60 @@ public class TradeController {
         );
     }
 
+    @GetMapping("/tradeFsmEvents/{tradeId}")
+    @NonNull
+    public ResponseEntity<List<Event>> tradeFsmEvents(
+            @PathVariable final long tradeId
+    ) {
+        final Optional<Trade> tradeOpt = tradeRepository.findById(tradeId);
+        if (tradeOpt.isEmpty()) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
+        final Transition[] transitions = getTradeFsm(
+                tradeOpt.get()
+        ).getCurrentState().transitions();
+        if (ArrayUtils.isEmpty(transitions)) {
+            return ResponseEntity.of(Optional.of(
+                    List.of()
+            ));
+        }
+
+        final List<Event> events = Arrays.stream(transitions)
+                .map(Transition::event)
+                .toList();
+
+        return ResponseEntity.of(Optional.of(
+                events
+        ));
+    }
+
+    @GetMapping("/tradeFsmState/{tradeId}")
+    @NonNull
+    public ResponseEntity<State> tradeFsmState(
+            @PathVariable final long tradeId
+    ) {
+        final Optional<Trade> tradeOpt = tradeRepository.findById(tradeId);
+        if (tradeOpt.isEmpty()) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
+        final State fsmState = getTradeFsm(
+                tradeOpt.get()
+        ).getCurrentState();
+
+        return ResponseEntity.of(Optional.of(
+                fsmState
+        ));
+    }
+
     @GetMapping("/tradeAccept/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<Trade> tradeAccept(
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
-        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+        final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Accept", tradeId, userId
         );
 
@@ -59,7 +111,7 @@ public class TradeController {
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
-        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+        final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Receive", tradeId, userId
         );
 
@@ -73,7 +125,7 @@ public class TradeController {
             @PathVariable final long userId,
             @RequestBody @Nullable final String reason
     ) {
-        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+        final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Abandon", tradeId, userId
         );
 
@@ -86,7 +138,7 @@ public class TradeController {
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
-        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+        final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Complete", tradeId, userId
         );
 
@@ -100,7 +152,7 @@ public class TradeController {
             @PathVariable final long userId,
             @RequestBody @Nullable final String reason
     ) {
-        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+        final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Fail", tradeId, userId
         );
 
@@ -113,7 +165,7 @@ public class TradeController {
             @PathVariable final long tradeId,
             @PathVariable final long userId
     ) {
-        final Optional<Trade> tradeOpt = handleTradeEvent("" +
+        final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Decline", tradeId, userId
         );
 
