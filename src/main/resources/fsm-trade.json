@@ -81,7 +81,7 @@
                     "@class": "com.tiffanytimbric.fsm.Transition",
                     "event": {
                       "@class": "com.tiffanytimbric.fsm.Event",
-                      "name": "Recieve",
+                      "name": "Receive",
                       "dataArg": null
                     },
                     "toState": {
@@ -108,7 +108,7 @@
                           "@class": "com.tiffanytimbric.fsm.Transition",
                           "event": {
                             "@class": "com.tiffanytimbric.fsm.Event",
-                            "name": "Recieve",
+                            "name": "Receive",
                             "dataArg": null
                           },
                           "toState": {

@@ -61,7 +61,7 @@ public class TradeUtil {
                         null, abandonedEndState, null
                 ),
                 new Transition(
-                        new Event("Recieve", null),
+                        new Event("Receive", null),
                         null, receivedState, null
                 )
         );
@@ -73,7 +73,7 @@ public class TradeUtil {
                         null, abandonedEndState, null
                 ),
                 new Transition(
-                        new Event("Recieve", null),
+                        new Event("Receive", null),
                         null, partiallyReceivedState, null
                 )
         );
