@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @RestController
 public class TradeController {
 
@@ -260,26 +262,63 @@ public class TradeController {
             return Optional.empty();
         }
 
-        // TODO: Add `userId` to event data.
-
         final Optional<Trade> tradeOpt = tradeRepository.findById(tradeId);
         if (tradeOpt.isEmpty()) {
             return tradeOpt;
         }
-        final Trade trade = tradeOpt.get();
+        Trade trade = tradeOpt.get();
 
-        final State toState = getTradeFsm(trade).handleEvent(eventName);
-        if (trade.getState().equals(toState)) {
+        final State<String> toState = getTradeFsm(trade).handleEvent(eventName);
+        if (trade.getState().equals(toState.name())) {
+            trade = addUserIdToDataItem(trade, userId);
+
             return Optional.of(trade);
         }
 
-        trade.setState(
-                toState.name()
-        );
+        trade.setState(toState.name());
+        trade.setDataItem(toState.dataItem());
+
+        trade = addUserIdToDataItem(trade, userId);
 
         final Trade tradeSaved = tradeRepository.save(trade);
 
         return Optional.of(tradeSaved);
+    }
+
+    @Nullable
+    private Trade addUserIdToDataItem(
+            @Nullable final Trade trade,
+            long userId
+    ) {
+        if (trade == null) {
+            return null;
+        }
+
+        final Trade tradeClone = (Trade) trade.clone();
+
+        String dataItem = tradeClone.getDataItem();
+        if (isBlank(dataItem)) {
+            tradeClone.setDataItem(String.valueOf(userId));
+
+            return tradeClone;
+        }
+
+        if (
+                List.of(dataItem.split(","))
+                        .contains(String.valueOf(userId))
+        ) {
+            return tradeClone;
+        }
+
+        if (!dataItem.trim().isEmpty()) {
+            dataItem = dataItem + ",";
+        }
+
+        dataItem = dataItem + userId;
+
+        tradeClone.setDataItem(dataItem);
+
+        return tradeClone;
     }
 
 }

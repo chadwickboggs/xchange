@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Entity
 @Table(name = "trade")
-public class Trade implements Serializable {
+public class Trade implements Serializable, Cloneable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,7 @@ public class Trade implements Serializable {
     @JsonProperty("item_two_id")
     private int itemTwoId;
     private String state = "Proposed";
+    private String dataItem;
 
     public Trade() {
     }
@@ -42,12 +43,14 @@ public class Trade implements Serializable {
             @NonNull final Long id,
             @NonNull final int itemOneId,
             @NonNull final int itemTwoId,
-            @NonNull final String state
+            @NonNull final String state,
+            @NonNull final String dataItem
     ) {
         this.id = id;
         this.itemOneId = itemOneId;
         this.itemTwoId = itemTwoId;
         this.state = state;
+        this.dataItem = dataItem;
     }
 
     @Nullable
@@ -82,44 +85,6 @@ public class Trade implements Serializable {
         this.id = name;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj == this) {
-            return true;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-        Trade rhs = (Trade) obj;
-        return new EqualsBuilder()
-                .append(this.id, rhs.id)
-                .append(this.itemOneId, rhs.itemOneId)
-                .append(this.itemTwoId, rhs.itemTwoId)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(id)
-                .append(itemOneId)
-                .append(itemTwoId)
-                .toHashCode();
-    }
-
-    @Override
-    @NonNull
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("id", id)
-                .append("itemOne", itemOneId)
-                .append("itemTwo", itemTwoId)
-                .toString();
-    }
-
     @Nullable
     public String getState() {
         return state;
@@ -136,5 +101,75 @@ public class Trade implements Serializable {
 
     public void setState(@NonNull final String state) {
         this.state = state;
+    }
+
+    @Nullable
+    public String getDataItem() {
+        return dataItem;
+    }
+
+    @NonNull
+    public Optional<String> dataItemOpt() {
+        if (StringUtils.isBlank(dataItem)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(dataItem);
+    }
+
+    public void setDataItem(
+            @Nullable final String dataItem
+    ) {
+        this.dataItem = dataItem;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Trade rhs = (Trade) obj;
+        return new EqualsBuilder()
+                .append(this.id, rhs.id)
+                .append(this.itemOneId, rhs.itemOneId)
+                .append(this.itemTwoId, rhs.itemTwoId)
+                .append(this.state, rhs.state)
+                .append(this.dataItem, rhs.dataItem)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(id)
+                .toHashCode();
+    }
+
+    @Override
+    @NonNull
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("itemOne", itemOneId)
+                .append("itemTwo", itemTwoId)
+                .append("state", state)
+                .append("dataItem", dataItem)
+                .toString();
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

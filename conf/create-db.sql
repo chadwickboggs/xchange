@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS trade
     item_one_id int                            not null,
     item_two_id int                            not null,
     state       varchar(32) default 'Proposed' not null,
+    data_item   text,
     foreign key (item_one_id) references item (id),
     foreign key (item_two_id) references item (id)
 );
