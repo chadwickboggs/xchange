@@ -274,6 +274,10 @@ public class TradeController {
             return Optional.of(trade);
         }
 
+        if (trade.dataItemSet().contains(String.valueOf(userId))) {
+            return Optional.of(trade);
+        }
+
         trade.setState(toState.name());
         trade.setDataItem(toState.dataItem());
 
