@@ -19,8 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import java.util.Set;
 
 @RestController
 public class TradeController {
@@ -296,27 +295,9 @@ public class TradeController {
 
         final Trade tradeClone = (Trade) trade.clone();
 
-        String dataItem = tradeClone.getDataItem();
-        if (isBlank(dataItem)) {
-            tradeClone.setDataItem(String.valueOf(userId));
-
-            return tradeClone;
-        }
-
-        if (
-                List.of(dataItem.split(","))
-                        .contains(String.valueOf(userId))
-        ) {
-            return tradeClone;
-        }
-
-        if (!dataItem.trim().isEmpty()) {
-            dataItem = dataItem + ",";
-        }
-
-        dataItem = dataItem + userId;
-
-        tradeClone.setDataItem(dataItem);
+        final Set<String> dataItemSet = tradeClone.dataItemSet();
+        dataItemSet.add(String.valueOf(userId));
+        tradeClone.dataItemSet(dataItemSet);
 
         return tradeClone;
     }

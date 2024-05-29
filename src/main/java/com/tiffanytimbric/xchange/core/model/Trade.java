@@ -1,6 +1,8 @@
 package com.tiffanytimbric.xchange.core.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -10,7 +12,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Entity
 @Table(name = "trade")
@@ -121,6 +125,31 @@ public class Trade implements Serializable, Cloneable {
             @Nullable final String dataItem
     ) {
         this.dataItem = dataItem;
+    }
+
+    @NonNull
+    public Set<String> dataItemSet() {
+        return dataItemOpt()
+                .map(dataItem -> {
+                    try {
+                        return new ObjectMapper().readValue(dataItem, HashSet.class);
+                    }
+                    catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .orElse(new HashSet<String>());
+    }
+
+    public void dataItemSet(@NonNull final Set<String> dataItemSet) {
+        try {
+            setDataItem(
+                    new ObjectMapper().writeValueAsString(dataItemSet)
+            );
+        }
+        catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
