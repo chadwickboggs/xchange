@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static java.lang.String.format;
 
@@ -19,27 +20,24 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
     private final UserController userController;
-    private final TagController tagController;
 
     public ItemController(
             @NonNull final ItemRepository itemRepository,
-            @NonNull final UserController userController,
-            @NonNull final TagController tagController
+            @NonNull final UserController userController
     ) {
         this.itemRepository = itemRepository;
         this.userController = userController;
-        this.tagController = tagController;
     }
 
     @GetMapping("/itemExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable final long id) {
+    public boolean doesExist(@PathVariable final UUID id) {
         return itemRepository.existsById(id);
     }
 
     @GetMapping("/item/{id}")
     @NonNull
-    public ResponseEntity<Item> readItem(@PathVariable final long id) {
+    public ResponseEntity<Item> readItem(@PathVariable final UUID id) {
         return ResponseEntity.of(
                 itemRepository.findById(id)
         );
@@ -68,6 +66,10 @@ public class ItemController {
                             "Invalid owner, owner not found.  Owner: %s", item.getOwner()
                     )
             );
+        }
+
+        if (item.idOpt().isEmpty()) {
+            item.setId(UUID.randomUUID());
         }
 
         return ResponseEntity.of(
@@ -112,7 +114,7 @@ public class ItemController {
 
     @DeleteMapping("/item/{id}")
     @NonNull
-    public ResponseEntity<Item> deleteItem(@PathVariable final long id) {
+    public ResponseEntity<Item> deleteItem(@PathVariable final UUID id) {
         final Optional<Item> itemOpt = itemRepository.findById(id);
         if (itemOpt.isEmpty()) {
             return ResponseEntity.ofNullable(null);

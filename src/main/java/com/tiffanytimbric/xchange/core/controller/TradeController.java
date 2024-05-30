@@ -31,13 +31,13 @@ public class TradeController {
 
     @GetMapping("/tradeExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable final long id) {
+    public boolean doesExist(@PathVariable final UUID id) {
         return tradeRepository.existsById(id);
     }
 
     @GetMapping("/trade/{id}")
     @NonNull
-    public ResponseEntity<Trade> readTrade(@PathVariable final long id) {
+    public ResponseEntity<Trade> readTrade(@PathVariable final UUID id) {
         return ResponseEntity.of(
                 tradeRepository.findById(id)
         );
@@ -46,7 +46,7 @@ public class TradeController {
     @GetMapping("/tradeFsmEvents/{tradeId}")
     @NonNull
     public ResponseEntity<List<Event>> tradeFsmEvents(
-            @PathVariable final long tradeId
+            @PathVariable final UUID tradeId
     ) {
         final Optional<Trade> tradeOpt = tradeRepository.findById(tradeId);
         if (tradeOpt.isEmpty()) {
@@ -74,7 +74,7 @@ public class TradeController {
     @GetMapping("/tradeFsmState/{tradeId}")
     @NonNull
     public ResponseEntity<State> tradeFsmState(
-            @PathVariable final long tradeId
+            @PathVariable final UUID tradeId
     ) {
         final Optional<Trade> tradeOpt = tradeRepository.findById(tradeId);
         if (tradeOpt.isEmpty()) {
@@ -93,8 +93,8 @@ public class TradeController {
     @GetMapping("/tradeAccept/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<Trade> tradeAccept(
-            @PathVariable final long tradeId,
-            @PathVariable final long userId
+            @PathVariable final UUID tradeId,
+            @PathVariable final UUID userId
     ) {
         final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Accept", tradeId, userId
@@ -106,8 +106,8 @@ public class TradeController {
     @GetMapping("/tradeReceive/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<Trade> tradeReceive(
-            @PathVariable final long tradeId,
-            @PathVariable final long userId
+            @PathVariable final UUID tradeId,
+            @PathVariable final UUID userId
     ) {
         final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Receive", tradeId, userId
@@ -119,8 +119,8 @@ public class TradeController {
     @PostMapping("/tradeAbandon/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<Trade> tradeAbandon(
-            @PathVariable final long tradeId,
-            @PathVariable final long userId,
+            @PathVariable final UUID tradeId,
+            @PathVariable final UUID userId,
             @RequestBody @Nullable final String reason
     ) {
         final Optional<Trade> tradeOpt = handleTradeEvent(
@@ -133,8 +133,8 @@ public class TradeController {
     @GetMapping("/tradeComplete/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<Trade> tradeComplete(
-            @PathVariable final long tradeId,
-            @PathVariable final long userId
+            @PathVariable final UUID tradeId,
+            @PathVariable final UUID userId
     ) {
         final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Complete", tradeId, userId
@@ -146,8 +146,8 @@ public class TradeController {
     @PostMapping("/tradeFail/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<Trade> tradeFail(
-            @PathVariable final long tradeId,
-            @PathVariable final long userId,
+            @PathVariable final UUID tradeId,
+            @PathVariable final UUID userId,
             @RequestBody @Nullable final String reason
     ) {
         final Optional<Trade> tradeOpt = handleTradeEvent(
@@ -160,8 +160,8 @@ public class TradeController {
     @GetMapping("/tradeDecline/{tradeId}/{userId}")
     @NonNull
     public ResponseEntity<Trade> tradeDecline(
-            @PathVariable final long tradeId,
-            @PathVariable final long userId
+            @PathVariable final UUID tradeId,
+            @PathVariable final UUID userId
     ) {
         final Optional<Trade> tradeOpt = handleTradeEvent(
                 "Decline", tradeId, userId
@@ -189,8 +189,15 @@ public class TradeController {
             return ResponseEntity.ofNullable(null);
         }
 
+        if (trade.idOpt().isEmpty()) {
+            trade.setId(UUID.randomUUID());
+        }
         if (trade.compositeIdOpt().isEmpty()) {
-            trade.setCompositeId(UUID.randomUUID());
+            Trade tradeCloned = (Trade) trade.clone();
+            tradeCloned.setId(UUID.randomUUID());
+            tradeCloned = tradeRepository.save(tradeCloned);
+
+            trade.setCompositeId(tradeCloned.getId());
         }
 
         return ResponseEntity.of(
@@ -225,7 +232,7 @@ public class TradeController {
 
     @DeleteMapping("/trade/{id}")
     @NonNull
-    public ResponseEntity<Trade> deleteTrade(@PathVariable final long id) {
+    public ResponseEntity<Trade> deleteTrade(@PathVariable final UUID id) {
         final Optional<Trade> tradeOpt = tradeRepository.findById(id);
         if (tradeOpt.isEmpty()) {
             return ResponseEntity.ofNullable(null);
@@ -255,8 +262,8 @@ public class TradeController {
     @NonNull
     private Optional<Trade> handleTradeEvent(
             @NonNull final String eventName,
-            long tradeId,
-            long userId
+            @NonNull final UUID tradeId,
+            @NonNull final UUID userId
     ) {
         if (!tradeRepository.existsById(tradeId)) {
             return Optional.empty();
@@ -304,7 +311,7 @@ public class TradeController {
     @Nullable
     private Trade addUserIdToDataItem(
             @Nullable final Trade trade,
-            long userId
+            @NonNull final UUID userId
     ) {
         if (trade == null) {
             return null;

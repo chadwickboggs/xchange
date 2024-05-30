@@ -1,7 +1,8 @@
 package com.tiffanytimbric.xchange.core.model;
 
-import jakarta.persistence.*;
-import org.apache.commons.collections4.CollectionUtils;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,7 +11,7 @@ import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.Set;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -19,46 +20,47 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     private String name;
     private String photoUrl;
     private int balance;
+/*
     @OneToMany
     private Set<Item> items;
     @OneToMany
     private Set<Want> wants;
+*/
 
     public User() {
     }
 
     public User(
-            @NonNull final Long id,
+            @NonNull final UUID id,
             @NonNull final String name,
             @NonNull final String photoUrl,
-            final int balance,
+            final int balance/*,
             @NonNull final Set<Item> items,
-            @NonNull final Set<Want> wants
+            @NonNull final Set<Want> wants*/
     ) {
         this.id = id;
         this.name = name;
         this.photoUrl = photoUrl;
         this.balance = balance;
-        this.items = items;
-        this.wants = wants;
+//        this.items = items;
+//        this.wants = wants;
     }
 
     @Nullable
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
     @NonNull
-    public Optional<Long> idOpt() {
+    public Optional<UUID> idOpt() {
         return Optional.ofNullable(id);
     }
 
-    public void setId(@NonNull final Long id) {
+    public void setId(@NonNull final UUID id) {
         this.id = id;
     }
 
@@ -102,6 +104,7 @@ public class User implements Serializable {
         this.balance = balance;
     }
 
+/*
     @Nullable
     public Set<Item> getItems() {
         return items;
@@ -137,6 +140,7 @@ public class User implements Serializable {
     public void setWants(@NonNull final Set<Want> wants) {
         this.wants = wants;
     }
+*/
 
     @Override
     public boolean equals(Object obj) {
@@ -155,8 +159,8 @@ public class User implements Serializable {
                 .append(this.name, rhs.name)
                 .append(this.photoUrl, rhs.photoUrl)
                 .append(this.balance, rhs.balance)
-                .append(this.items, rhs.items)
-                .append(this.wants, rhs.wants)
+//                .append(this.items, rhs.items)
+//                .append(this.wants, rhs.wants)
                 .isEquals();
     }
 
@@ -175,8 +179,8 @@ public class User implements Serializable {
                 .append("name", name)
                 .append("photoUrl", photoUrl)
                 .append("balance", balance)
-                .append("items", items)
-                .append("wants", wants)
+//                .append("items", items)
+//                .append("wants", wants)
                 .toString();
     }
 }

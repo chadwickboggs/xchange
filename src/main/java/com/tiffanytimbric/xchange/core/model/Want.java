@@ -12,14 +12,14 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "item")
 public class Want implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     private String name;
     private String description;
     @ManyToOne(
@@ -43,7 +43,7 @@ public class Want implements Serializable {
     }
 
     public Want(
-            @NonNull final Long id,
+            @NonNull final UUID id,
             @NonNull final String name,
             @NonNull final String description,
             @NonNull final ItemType type,
@@ -61,16 +61,16 @@ public class Want implements Serializable {
     }
 
     @Nullable
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
     @NonNull
-    public Optional<Long> idOpt() {
+    public Optional<UUID> idOpt() {
         return Optional.ofNullable(id);
     }
 
-    public void setId(@NonNull final Long id) {
+    public void setId(@NonNull final UUID id) {
         this.id = id;
     }
 

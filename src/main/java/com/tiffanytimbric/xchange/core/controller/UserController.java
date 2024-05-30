@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -24,13 +25,13 @@ public class UserController {
 
     @GetMapping("/userExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable final long id) {
+    public boolean doesExist(@PathVariable final UUID id) {
         return userRepository.existsById(id);
     }
 
     @GetMapping("/user/{id}")
     @NonNull
-    public ResponseEntity<User> readUser(@PathVariable final long id) {
+    public ResponseEntity<User> readUser(@PathVariable final UUID id) {
         return ResponseEntity.of(
                 userRepository.findById(id)
         );
@@ -49,6 +50,10 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody @Nullable final User user) {
         if (user == null) {
             return ResponseEntity.ofNullable(null);
+        }
+
+        if (user.idOpt().isEmpty()) {
+            user.setId(UUID.randomUUID());
         }
 
         return ResponseEntity.of(
@@ -83,7 +88,7 @@ public class UserController {
 
     @DeleteMapping("/user/{id}")
     @NonNull
-    public ResponseEntity<User> deleteUser(@PathVariable final long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable final UUID id) {
         final Optional<User> userOpt = userRepository.findById(id);
         if (userOpt.isEmpty()) {
             return ResponseEntity.ofNullable(null);

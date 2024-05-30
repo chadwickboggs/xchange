@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface TradeRepository extends ListCrudRepository<Trade, Long> {
+public interface TradeRepository extends ListCrudRepository<Trade, UUID> {
 
     List<Trade> findByCompositeId(UUID compositeId);
 

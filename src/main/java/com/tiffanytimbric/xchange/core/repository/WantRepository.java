@@ -4,6 +4,8 @@ import com.tiffanytimbric.xchange.core.model.Want;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface WantRepository extends ListCrudRepository<Want, Long> {
+public interface WantRepository extends ListCrudRepository<Want, UUID> {
 }

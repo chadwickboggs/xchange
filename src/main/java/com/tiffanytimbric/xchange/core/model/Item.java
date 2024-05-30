@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -20,8 +21,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class Item implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     private String name;
     private String description;
     private String photoUrl;
@@ -39,20 +39,20 @@ public class Item implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "tag_name")
     )
     private Set<Tag> tags;
-    private long owner;
+    private UUID owner;
     private int price;
 
     public Item() {
     }
 
     public Item(
-            @NonNull final Long id,
+            @NonNull final UUID id,
             @NonNull final String name,
             @NonNull final String description,
             @NonNull final String photoUrl,
             @NonNull final ItemType type,
             @NonNull final Set<Tag> tags,
-            final long owner,
+            final UUID owner,
             final int price
     ) {
         this.id = id;
@@ -66,16 +66,16 @@ public class Item implements Serializable {
     }
 
     @Nullable
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
     @NonNull
-    public Optional<Long> idOpt() {
+    public Optional<UUID> idOpt() {
         return Optional.ofNullable(id);
     }
 
-    public void setId(@NonNull final Long id) {
+    public void setId(@NonNull final UUID id) {
         this.id = id;
     }
 
@@ -157,11 +157,17 @@ public class Item implements Serializable {
         this.tags = tags;
     }
 
-    public long getOwner() {
+    @Nullable
+    public UUID getOwner() {
         return owner;
     }
 
-    public void setOwner(long owner) {
+    @NonNull
+    public Optional<UUID> ownerOpt() {
+        return Optional.ofNullable(owner);
+    }
+
+    public void setOwner(@NonNull final UUID owner) {
         this.owner = owner;
     }
 

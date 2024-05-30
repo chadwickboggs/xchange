@@ -256,7 +256,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"tiffany\",\n    \"balance\": 20\n}",
+									"raw": "{\n\t\"name\": \"chad\",\n    \"balance\": 10\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -289,7 +289,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/user/1",
+									"raw": "http://{{host}}:{{port}}/user/2abc1027-9383-48d4-a090-7c0e5a529e11",
 									"protocol": "http",
 									"host": [
 										"{{host}}"
@@ -297,7 +297,7 @@
 									"port": "{{port}}",
 									"path": [
 										"user",
-										"1"
+										"2abc1027-9383-48d4-a090-7c0e5a529e11"
 									]
 								}
 							},
@@ -527,7 +527,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"iPhone SE\",\n    \"description\": \"This item is a 2022 iPhone SE.\",\n    \"photoUrl\": \"https://i.pcmag.com/imagery/reviews/06CbOjiKnKQyAK0K6LLTyLM-1..v1647630209.jpg\",\n    \"type\": {\n        \"name\": \"phone\"\n    },\n    \"owner\": 1,\n    \"tags\": [\n        {\n            \"name\": \"black\"\n        }\n    ],\n    \"price\": \"50\"\n}",
+									"raw": "{\n\t\"name\": \"iPhone 8\",\n    \"description\": \"This item is a 2019 iPhone 8.\",\n    \"photoUrl\": \"https://i.pcmag.com/imagery/reviews/06CbOjiKnKQyAK0K6LLTyLM-1..v1647630209.jpg\",\n    \"type\": {\n        \"name\": \"phone\"\n    },\n    \"owner\": \"2abc1027-9383-48d4-a090-7c0e5a529e11\",\n    \"tags\": [\n        {\n            \"name\": \"white\"\n        }\n    ],\n    \"price\": \"40\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -560,7 +560,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/item/14",
+									"raw": "http://{{host}}:{{port}}/item/51edad5d-83cf-4579-bdf2-8bf1750c0fa2",
 									"protocol": "http",
 									"host": [
 										"{{host}}"
@@ -568,7 +568,7 @@
 									"port": "{{port}}",
 									"path": [
 										"item",
-										"14"
+										"51edad5d-83cf-4579-bdf2-8bf1750c0fa2"
 									]
 								}
 							},
@@ -994,7 +994,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"item_one_id\": 5,\n    \"item_two_id\": 6\n}",
+									"raw": "{\n    \"item_one_id\": \"e6cd6dff-34ad-49e2-8171-00da6bfae0bb\",\n    \"item_two_id\": \"51edad5d-83cf-4579-bdf2-8bf1750c0fa2\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1027,7 +1027,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/trade/1",
+									"raw": "http://{{host}}:{{port}}/trade/a650da1f-3bc8-4866-b2a8-7d9fef4058cd",
 									"protocol": "http",
 									"host": [
 										"{{host}}"
@@ -1035,7 +1035,7 @@
 									"port": "{{port}}",
 									"path": [
 										"trade",
-										"1"
+										"a650da1f-3bc8-4866-b2a8-7d9fef4058cd"
 									]
 								}
 							},

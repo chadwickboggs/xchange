@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class WantController {
@@ -24,13 +25,13 @@ public class WantController {
 
     @GetMapping("/wantExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable final long id) {
+    public boolean doesExist(@PathVariable final UUID id) {
         return wantRepository.existsById(id);
     }
 
     @GetMapping("/want/{id}")
     @NonNull
-    public ResponseEntity<Want> readWant(@PathVariable final long id) {
+    public ResponseEntity<Want> readWant(@PathVariable final UUID id) {
         return ResponseEntity.of(
                 wantRepository.findById(id)
         );
@@ -41,6 +42,10 @@ public class WantController {
     public ResponseEntity<Want> createWant(@RequestBody @Nullable final Want want) {
         if (want == null) {
             return ResponseEntity.ofNullable(null);
+        }
+
+        if (want.idOpt().isEmpty()) {
+            want.setId(UUID.randomUUID());
         }
 
         return ResponseEntity.of(
@@ -75,7 +80,7 @@ public class WantController {
 
     @DeleteMapping("/want/{id}")
     @NonNull
-    public ResponseEntity<Want> deleteWant(@PathVariable final long id) {
+    public ResponseEntity<Want> deleteWant(@PathVariable final UUID id) {
         final Optional<Want> itemOpt = wantRepository.findById(id);
         if (itemOpt.isEmpty()) {
             return ResponseEntity.ofNullable(null);

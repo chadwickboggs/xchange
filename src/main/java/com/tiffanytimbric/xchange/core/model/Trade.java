@@ -22,8 +22,7 @@ import java.util.UUID;
 public class Trade implements Serializable, Cloneable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     private UUID compositeId;
     @JoinColumn(
             name = "item_one_id",
@@ -31,14 +30,14 @@ public class Trade implements Serializable, Cloneable {
             referencedColumnName = "id"
     )
     @JsonProperty("item_one_id")
-    private int itemOneId;
+    private UUID itemOneId;
     @JoinColumn(
             name = "item_two_id",
             nullable = false,
             referencedColumnName = "id"
     )
     @JsonProperty("item_two_id")
-    private int itemTwoId;
+    private UUID itemTwoId;
     private String state = "Proposed";
     private String dataItem;
 
@@ -46,10 +45,10 @@ public class Trade implements Serializable, Cloneable {
     }
 
     public Trade(
-            @NonNull final Long id,
+            @NonNull final UUID id,
             @NonNull final UUID compositeId,
-            @NonNull final int itemOneId,
-            @NonNull final int itemTwoId,
+            @NonNull final UUID itemOneId,
+            @NonNull final UUID itemTwoId,
             @NonNull final String state,
             @NonNull final String dataItem
     ) {
@@ -62,8 +61,13 @@ public class Trade implements Serializable, Cloneable {
     }
 
     @Nullable
-    public Long getId() {
+    public UUID getId() {
         return id;
+    }
+
+    @NonNull
+    public Optional<UUID> idOpt() {
+        return Optional.ofNullable(id);
     }
 
     @Nullable
@@ -83,29 +87,39 @@ public class Trade implements Serializable, Cloneable {
     }
 
     @Nullable
-    public int getItemOneId() {
+    public UUID getItemOneId() {
         return itemOneId;
     }
 
-    public void setItemOneId(@NonNull final int itemOneId) {
+    @NonNull
+    public Optional<UUID> itemOneIdOpt() {
+        return Optional.ofNullable(itemOneId);
+    }
+
+    public void setItemOneId(@NonNull final UUID itemOneId) {
         this.itemOneId = itemOneId;
     }
 
     @Nullable
-    public int getItemTwoId() {
+    public UUID getItemTwoId() {
         return itemTwoId;
     }
 
-    public void setItemTwoId(@NonNull final int itemTwoId) {
+    @NonNull
+    public Optional<UUID> itemTwoIdOpt() {
+        return Optional.ofNullable(itemTwoId);
+    }
+
+    public void setItemTwoId(@NonNull final UUID itemTwoId) {
         this.itemTwoId = itemTwoId;
     }
 
     @NonNull
-    public Optional<Long> nameOpt() {
+    public Optional<UUID> nameOpt() {
         return Optional.ofNullable(id);
     }
 
-    public void setId(@NonNull final Long name) {
+    public void setId(@NonNull final UUID name) {
         this.id = name;
     }
 
