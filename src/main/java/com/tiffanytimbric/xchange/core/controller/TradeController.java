@@ -16,10 +16,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class TradeController {
@@ -192,6 +189,10 @@ public class TradeController {
             return ResponseEntity.ofNullable(null);
         }
 
+        if (trade.compositeIdOpt().isEmpty()) {
+            trade.setCompositeId(UUID.randomUUID());
+        }
+
         return ResponseEntity.of(
                 Optional.of(tradeRepository.save(trade))
         );
@@ -265,27 +266,39 @@ public class TradeController {
         if (tradeOpt.isEmpty()) {
             return tradeOpt;
         }
-        Trade trade = tradeOpt.get();
+        final Trade trade = tradeOpt.get();
 
         final State<String> toState = getTradeFsm(trade).handleEvent(eventName);
-        if (trade.getState().equals(toState.name())) {
-            trade = addUserIdToDataItem(trade, userId);
+        if (trade.getState().equalsIgnoreCase(toState.name())) {
+            Trade tradeUpdated = addUserIdToDataItem(trade, userId);
 
-            return Optional.of(trade);
+            if (!tradeUpdated.equals(trade)) {
+                tradeUpdated = tradeRepository.save(tradeUpdated);
+            }
+
+            return Optional.of(tradeUpdated);
         }
 
-        if (trade.dataItemSet().contains(String.valueOf(userId))) {
-            return Optional.of(trade);
+        Trade tradeUpdated = addUserIdToDataItem(trade, userId);
+        final Set<String> dataItemSet = tradeUpdated.dataItemSet();
+
+        tradeUpdated = tradeRepository.save(tradeUpdated);
+
+        final List<Trade> peerTrades = tradeRepository.findByCompositeId(
+                tradeUpdated.getCompositeId()
+        );
+        int numberOfParticipants = peerTrades.size() + 1;
+
+        if (dataItemSet.size() < numberOfParticipants) {
+            return Optional.of(tradeUpdated);
         }
 
-        trade.setState(toState.name());
-        trade.setDataItem(toState.dataItem());
+        tradeUpdated.setState(toState.name());
+        tradeUpdated.dataItemSet(Set.of(String.valueOf(userId)));
 
-        trade = addUserIdToDataItem(trade, userId);
+        tradeUpdated = tradeRepository.save(tradeUpdated);
 
-        final Trade tradeSaved = tradeRepository.save(trade);
-
-        return Optional.of(tradeSaved);
+        return Optional.of(tradeUpdated);
     }
 
     @Nullable
