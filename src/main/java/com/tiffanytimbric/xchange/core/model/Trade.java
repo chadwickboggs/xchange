@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "trade")
@@ -23,6 +24,7 @@ public class Trade implements Serializable, Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private UUID compositeId;
     @JoinColumn(
             name = "item_one_id",
             nullable = false,
@@ -45,12 +47,14 @@ public class Trade implements Serializable, Cloneable {
 
     public Trade(
             @NonNull final Long id,
+            @NonNull final UUID compositeId,
             @NonNull final int itemOneId,
             @NonNull final int itemTwoId,
             @NonNull final String state,
             @NonNull final String dataItem
     ) {
         this.id = id;
+        this.compositeId = compositeId;
         this.itemOneId = itemOneId;
         this.itemTwoId = itemTwoId;
         this.state = state;
@@ -60,6 +64,22 @@ public class Trade implements Serializable, Cloneable {
     @Nullable
     public Long getId() {
         return id;
+    }
+
+    @Nullable
+    public UUID getCompositeId() {
+        return compositeId;
+    }
+
+    @NonNull
+    public Optional<UUID> compositeIdOpt() {
+        return Optional.ofNullable(compositeId);
+    }
+
+    public void setCompositeId(
+            @NonNull final UUID compositeId
+    ) {
+        this.compositeId = compositeId;
     }
 
     @Nullable
@@ -166,6 +186,7 @@ public class Trade implements Serializable, Cloneable {
         Trade rhs = (Trade) obj;
         return new EqualsBuilder()
                 .append(this.id, rhs.id)
+                .append(this.compositeId, rhs.compositeId)
                 .append(this.itemOneId, rhs.itemOneId)
                 .append(this.itemTwoId, rhs.itemTwoId)
                 .append(this.state, rhs.state)
@@ -185,6 +206,7 @@ public class Trade implements Serializable, Cloneable {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("id", id)
+                .append("compositeId", compositeId)
                 .append("itemOne", itemOneId)
                 .append("itemTwo", itemTwoId)
                 .append("state", state)
