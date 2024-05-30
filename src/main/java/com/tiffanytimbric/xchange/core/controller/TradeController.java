@@ -275,6 +275,40 @@ public class TradeController {
         }
         final Trade trade = tradeOpt.get();
 
+        if (trade.compositeIdOpt().isEmpty()) {
+            return handleParentTradeEvent(eventName, tradeId, userId);
+        }
+
+        return handleChildTradeEvent(eventName, tradeId, userId);
+    }
+
+    @NonNull
+    private Optional<Trade> handleParentTradeEvent(
+            @NonNull final String eventName,
+            @NonNull final UUID tradeId,
+            @NonNull final UUID userId
+    ) {
+        // TODO: Implement.
+
+        return Optional.empty();
+    }
+
+    @NonNull
+    private Optional<Trade> handleChildTradeEvent(
+            @NonNull final String eventName,
+            @NonNull final UUID tradeId,
+            @NonNull final UUID userId
+    ) {
+        if (!tradeRepository.existsById(tradeId)) {
+            return Optional.empty();
+        }
+
+        final Optional<Trade> tradeOpt = tradeRepository.findById(tradeId);
+        if (tradeOpt.isEmpty()) {
+            return tradeOpt;
+        }
+        final Trade trade = tradeOpt.get();
+
         final State<String> toState = getTradeFsm(trade).handleEvent(eventName);
         if (trade.getState().equalsIgnoreCase(toState.name())) {
             Trade tradeUpdated = addUserIdToDataItem(trade, userId);
@@ -291,12 +325,7 @@ public class TradeController {
 
         tradeUpdated = tradeRepository.save(tradeUpdated);
 
-        final List<Trade> peerTrades = tradeRepository.findByCompositeId(
-                tradeUpdated.getCompositeId()
-        );
-        int numberOfParticipants = peerTrades.size() + 1;
-
-        if (dataItemSet.size() < numberOfParticipants) {
+        if (dataItemSet.size() < 2) {
             return Optional.of(tradeUpdated);
         }
 
