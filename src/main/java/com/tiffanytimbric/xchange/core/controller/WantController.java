@@ -25,13 +25,25 @@ public class WantController {
 
     @GetMapping("/wantExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable final UUID id) {
+    public boolean doesExist(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return wantRepository.count() > 0;
+        }
+
         return wantRepository.existsById(id);
     }
 
     @GetMapping("/want/{id}")
     @NonNull
-    public ResponseEntity<Want> readWant(@PathVariable final UUID id) {
+    public ResponseEntity<Want> readWant(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         return ResponseEntity.of(
                 wantRepository.findById(id)
         );
@@ -39,9 +51,11 @@ public class WantController {
 
     @PostMapping("/want")
     @NonNull
-    public ResponseEntity<Want> createWant(@RequestBody @Nullable final Want want) {
+    public ResponseEntity<Want> createWant(
+            @RequestBody @Nullable final Want want
+    ) {
         if (want == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         if (want.idOpt().isEmpty()) {
@@ -55,9 +69,11 @@ public class WantController {
 
     @PutMapping("/want")
     @NonNull
-    public ResponseEntity<Want> updateWant(@RequestBody @Nullable final Want want) {
+    public ResponseEntity<Want> updateWant(
+            @RequestBody @Nullable final Want want
+    ) {
         if (want == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -67,9 +83,11 @@ public class WantController {
 
     @PatchMapping("/want")
     @NonNull
-    public ResponseEntity<Want> patchWant(@RequestBody @Nullable final Want want) {
+    public ResponseEntity<Want> patchWant(
+            @RequestBody @Nullable final Want want
+    ) {
         if (want == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         throw new ResponseStatusException(
@@ -80,10 +98,16 @@ public class WantController {
 
     @DeleteMapping("/want/{id}")
     @NonNull
-    public ResponseEntity<Want> deleteWant(@PathVariable final UUID id) {
+    public ResponseEntity<Want> deleteWant(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         final Optional<Want> itemOpt = wantRepository.findById(id);
         if (itemOpt.isEmpty()) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         wantRepository.deleteById(id);

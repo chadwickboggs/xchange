@@ -25,13 +25,25 @@ public class UserController {
 
     @GetMapping("/userExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable final UUID id) {
+    public boolean doesExist(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return userRepository.count() > 0;
+        }
+
         return userRepository.existsById(id);
     }
 
     @GetMapping("/user/{id}")
     @NonNull
-    public ResponseEntity<User> readUser(@PathVariable final UUID id) {
+    public ResponseEntity<User> readUser(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         return ResponseEntity.of(
                 userRepository.findById(id)
         );
@@ -39,7 +51,9 @@ public class UserController {
 
     @GetMapping("/userByName/{name}")
     @NonNull
-    public ResponseEntity<User> readUserByName(@PathVariable final String name) {
+    public ResponseEntity<User> readUserByName(
+            @PathVariable final String name
+    ) {
         return ResponseEntity.of(
                 userRepository.findByName(name)
         );
@@ -47,9 +61,11 @@ public class UserController {
 
     @PostMapping("/user")
     @NonNull
-    public ResponseEntity<User> createUser(@RequestBody @Nullable final User user) {
+    public ResponseEntity<User> createUser(
+            @RequestBody @Nullable final User user
+    ) {
         if (user == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         if (user.idOpt().isEmpty()) {
@@ -63,9 +79,11 @@ public class UserController {
 
     @PutMapping("/user")
     @NonNull
-    public ResponseEntity<User> updateUser(@RequestBody @Nullable final User user) {
+    public ResponseEntity<User> updateUser(
+            @RequestBody @Nullable final User user
+    ) {
         if (user == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -75,9 +93,11 @@ public class UserController {
 
     @PatchMapping("/user")
     @NonNull
-    public ResponseEntity<User> patchUser(@RequestBody @Nullable final User user) {
+    public ResponseEntity<User> patchUser(
+            @RequestBody @Nullable final User user
+    ) {
         if (user == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         throw new ResponseStatusException(
@@ -88,10 +108,16 @@ public class UserController {
 
     @DeleteMapping("/user/{id}")
     @NonNull
-    public ResponseEntity<User> deleteUser(@PathVariable final UUID id) {
+    public ResponseEntity<User> deleteUser(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         final Optional<User> userOpt = userRepository.findById(id);
         if (userOpt.isEmpty()) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         userRepository.deleteById(id);

@@ -18,6 +18,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @RestController
 public class TradeController {
 
@@ -31,13 +33,25 @@ public class TradeController {
 
     @GetMapping("/tradeExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable final UUID id) {
+    public boolean doesExist(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return tradeRepository.count() > 0;
+        }
+
         return tradeRepository.existsById(id);
     }
 
     @GetMapping("/trade/{id}")
     @NonNull
-    public ResponseEntity<Trade> readTrade(@PathVariable final UUID id) {
+    public ResponseEntity<Trade> readTrade(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         return ResponseEntity.of(
                 tradeRepository.findById(id)
         );
@@ -184,9 +198,11 @@ public class TradeController {
 
     @PostMapping("/trade")
     @NonNull
-    public ResponseEntity<Trade> createTrade(@RequestBody @Nullable final Trade trade) {
+    public ResponseEntity<Trade> createTrade(
+            @RequestBody @Nullable final Trade trade
+    ) {
         if (trade == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         if (trade.idOpt().isEmpty()) {
@@ -207,9 +223,11 @@ public class TradeController {
 
     @PutMapping("/trade")
     @NonNull
-    public ResponseEntity<Trade> updateTrade(@RequestBody @Nullable final Trade trade) {
+    public ResponseEntity<Trade> updateTrade(
+            @RequestBody @Nullable final Trade trade
+    ) {
         if (trade == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -219,9 +237,11 @@ public class TradeController {
 
     @PatchMapping("/trade")
     @NonNull
-    public ResponseEntity<Trade> patchTrade(@RequestBody @Nullable final Trade trade) {
+    public ResponseEntity<Trade> patchTrade(
+            @RequestBody @Nullable final Trade trade
+    ) {
         if (trade == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         throw new ResponseStatusException(
@@ -232,10 +252,16 @@ public class TradeController {
 
     @DeleteMapping("/trade/{id}")
     @NonNull
-    public ResponseEntity<Trade> deleteTrade(@PathVariable final UUID id) {
+    public ResponseEntity<Trade> deleteTrade(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         final Optional<Trade> tradeOpt = tradeRepository.findById(id);
         if (tradeOpt.isEmpty()) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         tradeRepository.deleteById(id);
@@ -261,10 +287,14 @@ public class TradeController {
 
     @NonNull
     private Optional<Trade> handleTradeEvent(
-            @NonNull final String eventName,
-            @NonNull final UUID tradeId,
-            @NonNull final UUID userId
+            @Nullable final String eventName,
+            @Nullable final UUID tradeId,
+            @Nullable final UUID userId
     ) {
+        if (isBlank(eventName) || tradeId == null || userId == null) {
+            return Optional.empty();
+        }
+
         if (!tradeRepository.existsById(tradeId)) {
             return Optional.empty();
         }
@@ -273,21 +303,39 @@ public class TradeController {
         if (tradeOpt.isEmpty()) {
             return tradeOpt;
         }
-        final Trade trade = tradeOpt.get();
 
-        if (trade.compositeIdOpt().isEmpty()) {
-            return handleParentTradeEvent(eventName, tradeId, userId);
+        return handleTradeEvent(
+                eventName, tradeOpt.get(), userId
+        );
+    }
+
+    @NonNull
+    private Optional<Trade> handleTradeEvent(
+            @Nullable final String eventName,
+            @Nullable final Trade trade,
+            @Nullable final UUID userId
+    ) {
+        if (isBlank(eventName) || trade == null || userId == null) {
+            return Optional.empty();
         }
 
-        return handleChildTradeEvent(eventName, tradeId, userId);
+        if (trade.compositeIdOpt().isEmpty()) {
+            return handleParentTradeEvent(eventName, trade, userId);
+        }
+
+        return handleChildTradeEvent(eventName, trade, userId);
     }
 
     @NonNull
     private Optional<Trade> handleParentTradeEvent(
-            @NonNull final String eventName,
-            @NonNull final UUID tradeId,
-            @NonNull final UUID userId
+            @Nullable final String eventName,
+            @Nullable final Trade trade,
+            @Nullable final UUID userId
     ) {
+        if (isBlank(eventName) || trade == null || userId == null) {
+            return Optional.empty();
+        }
+
         // TODO: Implement.
 
         return Optional.empty();
@@ -295,19 +343,13 @@ public class TradeController {
 
     @NonNull
     private Optional<Trade> handleChildTradeEvent(
-            @NonNull final String eventName,
-            @NonNull final UUID tradeId,
-            @NonNull final UUID userId
+            @Nullable final String eventName,
+            @Nullable final Trade trade,
+            @Nullable final UUID userId
     ) {
-        if (!tradeRepository.existsById(tradeId)) {
+        if (isBlank(eventName) || trade == null || userId == null) {
             return Optional.empty();
         }
-
-        final Optional<Trade> tradeOpt = tradeRepository.findById(tradeId);
-        if (tradeOpt.isEmpty()) {
-            return tradeOpt;
-        }
-        final Trade trade = tradeOpt.get();
 
         final State<String> toState = getTradeFsm(trade).handleEvent(eventName);
         if (trade.getState().equalsIgnoreCase(toState.name())) {
@@ -340,9 +382,9 @@ public class TradeController {
     @Nullable
     private Trade addUserIdToDataItem(
             @Nullable final Trade trade,
-            @NonNull final UUID userId
+            @Nullable final UUID userId
     ) {
-        if (trade == null) {
+        if (trade == null || userId == null) {
             return null;
         }
 

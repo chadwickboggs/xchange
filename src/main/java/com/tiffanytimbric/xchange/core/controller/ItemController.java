@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
 public class ItemController {
@@ -31,13 +32,25 @@ public class ItemController {
 
     @GetMapping("/itemExist/{id}")
     @NonNull
-    public boolean doesExist(@PathVariable final UUID id) {
+    public boolean doesExist(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return itemRepository.count() > 0;
+        }
+
         return itemRepository.existsById(id);
     }
 
     @GetMapping("/item/{id}")
     @NonNull
-    public ResponseEntity<Item> readItem(@PathVariable final UUID id) {
+    public ResponseEntity<Item> readItem(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         return ResponseEntity.of(
                 itemRepository.findById(id)
         );
@@ -45,7 +58,13 @@ public class ItemController {
 
     @GetMapping("/itemByName/{name}")
     @NonNull
-    public ResponseEntity<List<Item>> readItemByName(@PathVariable final String name) {
+    public ResponseEntity<List<Item>> readItemByName(
+            @PathVariable @Nullable final String name
+    ) {
+        if (isBlank(name)) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         return ResponseEntity.ofNullable(
                 itemRepository.findByName(name)
         );
@@ -53,9 +72,11 @@ public class ItemController {
 
     @PostMapping("/item")
     @NonNull
-    public ResponseEntity<Item> createItem(@RequestBody @Nullable final Item item) {
+    public ResponseEntity<Item> createItem(
+            @RequestBody @Nullable final Item item
+    ) {
         if (item == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         // Verify the referenced owner exists.
@@ -79,9 +100,11 @@ public class ItemController {
 
     @PutMapping("/item")
     @NonNull
-    public ResponseEntity<Item> updateItem(@RequestBody @Nullable final Item item) {
+    public ResponseEntity<Item> updateItem(
+            @RequestBody @Nullable final Item item
+    ) {
         if (item == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         // Verify the referenced owner exists.
@@ -101,9 +124,11 @@ public class ItemController {
 
     @PatchMapping("/item")
     @NonNull
-    public ResponseEntity<Item> patchItem(@RequestBody @Nullable final Item item) {
+    public ResponseEntity<Item> patchItem(
+            @RequestBody @Nullable final Item item
+    ) {
         if (item == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         throw new ResponseStatusException(
@@ -114,10 +139,16 @@ public class ItemController {
 
     @DeleteMapping("/item/{id}")
     @NonNull
-    public ResponseEntity<Item> deleteItem(@PathVariable final UUID id) {
+    public ResponseEntity<Item> deleteItem(
+            @PathVariable @Nullable final UUID id
+    ) {
+        if (id == null) {
+            return ResponseEntity.of(Optional.empty());
+        }
+
         final Optional<Item> itemOpt = itemRepository.findById(id);
         if (itemOpt.isEmpty()) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         itemRepository.deleteById(id);

@@ -26,9 +26,11 @@ public class ItemTypeController {
 
     @GetMapping("/itemTypeExist/{name}")
     @NonNull
-    public boolean doesExist(@PathVariable @Nullable final String name) {
+    public boolean doesExist(
+            @PathVariable @Nullable final String name
+    ) {
         if (isBlank(name)) {
-            return false;
+            return itemTypeRepository.count() > 0;
         }
 
         return itemTypeRepository.existsById(name);
@@ -36,9 +38,11 @@ public class ItemTypeController {
 
     @GetMapping("/itemType/{name}")
     @NonNull
-    public ResponseEntity<ItemType> readItemType(@PathVariable @Nullable final String name) {
+    public ResponseEntity<ItemType> readItemType(
+            @PathVariable @Nullable final String name
+    ) {
         if (isBlank(name)) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -48,9 +52,11 @@ public class ItemTypeController {
 
     @PostMapping("/itemType")
     @NonNull
-    public ResponseEntity<ItemType> createItemType(@RequestBody @Nullable final ItemType itemType) {
+    public ResponseEntity<ItemType> createItemType(
+            @RequestBody @Nullable final ItemType itemType
+    ) {
         if (itemType == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -60,9 +66,11 @@ public class ItemTypeController {
 
     @PutMapping("/itemType")
     @NonNull
-    public ResponseEntity<ItemType> updateItemType(@RequestBody @Nullable final ItemType itemType) {
+    public ResponseEntity<ItemType> updateItemType(
+            @RequestBody @Nullable final ItemType itemType
+    ) {
         if (itemType == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -72,9 +80,11 @@ public class ItemTypeController {
 
     @PatchMapping("/itemType")
     @NonNull
-    public ResponseEntity<ItemType> patchItemType(@RequestBody @Nullable final ItemType itemType) {
+    public ResponseEntity<ItemType> patchItemType(
+            @RequestBody @Nullable final ItemType itemType
+    ) {
         if (itemType == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         throw new ResponseStatusException(
@@ -85,14 +95,16 @@ public class ItemTypeController {
 
     @DeleteMapping("/itemType/{name}")
     @NonNull
-    public ResponseEntity<ItemType> deleteItemType(@PathVariable @Nullable final String name) {
+    public ResponseEntity<ItemType> deleteItemType(
+            @PathVariable @Nullable final String name
+    ) {
         if (isBlank(name)) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         final Optional<ItemType> itemTypeOpt = itemTypeRepository.findById(name);
         if (itemTypeOpt.isEmpty()) {
-            return ResponseEntity.ofNullable(null);
+            ResponseEntity.of(Optional.empty());
         }
 
         itemTypeRepository.deleteById(name);

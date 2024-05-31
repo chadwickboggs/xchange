@@ -26,9 +26,11 @@ public class TagController {
 
     @GetMapping("/tagExist/{name}")
     @NonNull
-    public boolean doesExist(@PathVariable @Nullable final String name) {
+    public boolean doesExist(
+            @PathVariable @Nullable final String name
+    ) {
         if (isBlank(name)) {
-            return false;
+            return tagRepository.count() > 0;
         }
 
         return tagRepository.existsById(name);
@@ -36,9 +38,11 @@ public class TagController {
 
     @GetMapping("/tag/{name}")
     @NonNull
-    public ResponseEntity<Tag> readTag(@PathVariable @Nullable final String name) {
+    public ResponseEntity<Tag> readTag(
+            @PathVariable @Nullable final String name
+    ) {
         if (isBlank(name)) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -48,9 +52,11 @@ public class TagController {
 
     @PostMapping("/tag")
     @NonNull
-    public ResponseEntity<Tag> createTag(@RequestBody @Nullable final Tag tag) {
+    public ResponseEntity<Tag> createTag(
+            @RequestBody @Nullable final Tag tag
+    ) {
         if (tag == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -60,9 +66,11 @@ public class TagController {
 
     @PutMapping("/tag")
     @NonNull
-    public ResponseEntity<Tag> updateTag(@RequestBody @Nullable final Tag tag) {
+    public ResponseEntity<Tag> updateTag(
+            @RequestBody @Nullable final Tag tag
+    ) {
         if (tag == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         return ResponseEntity.of(
@@ -72,9 +80,11 @@ public class TagController {
 
     @PatchMapping("/tag")
     @NonNull
-    public ResponseEntity<Tag> patchTag(@RequestBody @Nullable final Tag tag) {
+    public ResponseEntity<Tag> patchTag(
+            @RequestBody @Nullable final Tag tag
+    ) {
         if (tag == null) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         throw new ResponseStatusException(
@@ -85,14 +95,16 @@ public class TagController {
 
     @DeleteMapping("/tag/{name}")
     @NonNull
-    public ResponseEntity<Tag> deleteTag(@PathVariable @Nullable final String name) {
+    public ResponseEntity<Tag> deleteTag(
+            @PathVariable @Nullable final String name
+    ) {
         if (isBlank(name)) {
-            return ResponseEntity.ofNullable(null);
+            return ResponseEntity.of(Optional.empty());
         }
 
         final Optional<Tag> tagOpt = tagRepository.findById(name);
         if (tagOpt.isEmpty()) {
-            return ResponseEntity.ofNullable(null);
+            ResponseEntity.of(Optional.empty());
         }
 
         tagRepository.deleteById(name);
