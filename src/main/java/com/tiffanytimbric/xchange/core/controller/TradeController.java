@@ -351,23 +351,21 @@ public class TradeController {
             return Optional.empty();
         }
 
-        final State<String> toState = getTradeFsm(trade).handleEvent(eventName);
-        if (trade.getState().equalsIgnoreCase(toState.name())) {
-            Trade tradeUpdated = addUserIdToDataItem(trade, userId);
-
-            if (!tradeUpdated.equals(trade)) {
-                tradeUpdated = tradeRepository.save(tradeUpdated);
-            }
-
-            return Optional.of(tradeUpdated);
+        Trade tradeUpdated = addUserIdToStateDataItem(trade, userId);
+        if (!tradeUpdated.equals(trade)) {
+            tradeUpdated = tradeRepository.save(tradeUpdated);
         }
 
-        Trade tradeUpdated = addUserIdToDataItem(trade, userId);
-        final Set<String> dataItemSet = tradeUpdated.dataItemSet();
+        final FiniteStateMachine tradeFsm = getTradeFsm(trade);
+        final State<String> currentState = new State<>(
+                trade.getState(), trade.getDataItem(),
+                tradeFsm.getCurrentState().transitions()
+        );
+        tradeFsm.setCurrentState(currentState);
 
-        tradeUpdated = tradeRepository.save(tradeUpdated);
+        final State<String> toState = tradeFsm.handleEvent(eventName);
 
-        if (dataItemSet.size() < 2) {
+        if (tradeUpdated.getState().equalsIgnoreCase(toState.name())) {
             return Optional.of(tradeUpdated);
         }
 
@@ -380,7 +378,7 @@ public class TradeController {
     }
 
     @Nullable
-    private Trade addUserIdToDataItem(
+    private Trade addUserIdToStateDataItem(
             @Nullable final Trade trade,
             @Nullable final UUID userId
     ) {

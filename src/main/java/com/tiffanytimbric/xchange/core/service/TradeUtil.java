@@ -4,7 +4,11 @@ import com.tiffanytimbric.fsm.Event;
 import com.tiffanytimbric.fsm.FiniteStateMachine;
 import com.tiffanytimbric.fsm.State;
 import com.tiffanytimbric.fsm.Transition;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 public class TradeUtil {
 
@@ -30,7 +34,8 @@ public class TradeUtil {
                 "Partially Completed", null,
                 new Transition(
                         new Event("Complete", null),
-                        null, completedEndState, null
+                        new AllParticipantsPredicate(),
+                        completedEndState, null
                 ),
                 new Transition(
                         new Event("Abandon", null),
@@ -62,7 +67,8 @@ public class TradeUtil {
                 ),
                 new Transition(
                         new Event("Receive", null),
-                        null, receivedState, null
+                        new AllParticipantsPredicate(),
+                        receivedState, null
                 )
         );
 
@@ -86,7 +92,8 @@ public class TradeUtil {
                 ),
                 new Transition(
                         new Event("Accept", null),
-                        null, acceptedState, null
+                        new AllParticipantsPredicate(),
+                        acceptedState, null
                 )
         );
 
@@ -107,4 +114,20 @@ public class TradeUtil {
         );
     }
 
+    private static class AllParticipantsPredicate implements Predicate<String> {
+        @Override
+        public boolean test(final String dataItem) {
+            if (StringUtils.isBlank(dataItem)) {
+                return false;
+            }
+
+            final List<String> dataItemList = List.of(dataItem.split(","));
+
+            if (dataItemList.size() < 2) {
+                return false;
+            }
+
+            return true;
+        }
+    }
 }
