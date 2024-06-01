@@ -278,9 +278,13 @@ public class TradeController {
             return fsm;
         }
 
-        fsm.findState(trade.getState()).ifPresent(currentState ->
-                fsm.setCurrentState((State) currentState)
-        );
+        fsm.findState(trade.getState()).ifPresent(fsmState -> {
+            fsm.setCurrentState(new State<>(
+                    trade.getState(),
+                    trade.getDataItem(),
+                    ((State) fsmState).transitions()
+            ));
+        });
 
         return fsm;
     }
@@ -323,7 +327,30 @@ public class TradeController {
             return handleParentTradeEvent(eventName, trade, userId);
         }
 
-        return handleChildTradeEvent(eventName, trade, userId);
+        final Optional<Trade> tradeUpdatedOpt = handleChildTradeEvent(eventName, trade, userId);
+
+        //
+        // Propagate all end-state transitions to parent state.
+        //
+        tradeUpdatedOpt.ifPresent(tradeUpdated -> {
+            final State tradeFsmCurrentState = getTradeFsm(tradeUpdated).getCurrentState();
+            if (ArrayUtils.isEmpty(tradeFsmCurrentState.transitions())) {
+                if (tradeFsmCurrentState.name().equalsIgnoreCase("Complete")) {
+                    // TODO: Implement - if all child trade states are "Complete".
+                }
+                else {
+                    tradeRepository.findById(
+                                    tradeUpdated.getCompositeId()
+                            )
+                            .ifPresent(compositeTrade -> {
+                                compositeTrade.setState(tradeUpdated.getState());
+                                tradeRepository.save(compositeTrade);
+                            });
+                }
+            }
+        });
+
+        return tradeUpdatedOpt;
     }
 
     @NonNull
@@ -357,11 +384,6 @@ public class TradeController {
         }
 
         final FiniteStateMachine tradeFsm = getTradeFsm(trade);
-        final State<String> currentState = new State<>(
-                trade.getState(), trade.getDataItem(),
-                tradeFsm.getCurrentState().transitions()
-        );
-        tradeFsm.setCurrentState(currentState);
 
         final State<String> toState = tradeFsm.handleEvent(eventName);
 

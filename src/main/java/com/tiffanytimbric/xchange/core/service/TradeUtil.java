@@ -50,6 +50,10 @@ public class TradeUtil {
         final State receivedState = new State(
                 "Received", null,
                 new Transition(
+                        new Event("Abandon", null),
+                        null, abandonedEndState, null
+                ),
+                new Transition(
                         new Event("Fail", null),
                         null, failedEndState, null
                 ),
@@ -61,6 +65,10 @@ public class TradeUtil {
 
         final State partiallyReceivedState = new State(
                 "Partially Received", null,
+                new Transition(
+                        new Event("Abandon", null),
+                        null, abandonedEndState, null
+                ),
                 new Transition(
                         new Event("Abandon", null),
                         null, abandonedEndState, null
@@ -79,6 +87,10 @@ public class TradeUtil {
                         null, abandonedEndState, null
                 ),
                 new Transition(
+                        new Event("Abandon", null),
+                        null, abandonedEndState, null
+                ),
+                new Transition(
                         new Event("Receive", null),
                         null, partiallyReceivedState, null
                 )
@@ -86,6 +98,10 @@ public class TradeUtil {
 
         final State partiallyAcceptedState = new State(
                 "Partially Accepted", null,
+                new Transition(
+                        new Event("Abandon", null),
+                        null, abandonedEndState, null
+                ),
                 new Transition(
                         new Event("Decline", null),
                         null, declinedStateEndState, null

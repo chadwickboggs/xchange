@@ -1335,7 +1335,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://{{host}}:{{port}}/tradeAbandon/1/1",
+									"raw": "http://{{host}}:{{port}}/tradeAbandon/6bee68e7-f572-478f-ae83-0e8d9802a321/d84f21b2-ed6e-4315-96d6-76a362531b4a",
 									"protocol": "http",
 									"host": [
 										"{{host}}"
@@ -1343,8 +1343,8 @@
 									"port": "{{port}}",
 									"path": [
 										"tradeAbandon",
-										"1",
-										"1"
+										"6bee68e7-f572-478f-ae83-0e8d9802a321",
+										"d84f21b2-ed6e-4315-96d6-76a362531b4a"
 									]
 								}
 							},
