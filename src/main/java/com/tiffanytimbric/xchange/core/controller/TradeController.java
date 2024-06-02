@@ -335,8 +335,21 @@ public class TradeController {
         tradeUpdatedOpt.ifPresent(tradeUpdated -> {
             final State tradeFsmCurrentState = getTradeFsm(tradeUpdated).getCurrentState();
             if (ArrayUtils.isEmpty(tradeFsmCurrentState.transitions())) {
-                if (tradeFsmCurrentState.name().equalsIgnoreCase("Complete")) {
-                    // TODO: Implement - if all child trade states are "Complete".
+                if ("Complete".equalsIgnoreCase(tradeFsmCurrentState.name())) {
+                    boolean someIncomplete =
+                            tradeRepository.findByCompositeId(tradeUpdated.getCompositeId()).stream()
+                                    .map(Trade::getState)
+                                    .anyMatch(childTrade -> !"Complete".equalsIgnoreCase(childTrade));
+
+                    if (!someIncomplete) {
+                        tradeRepository.findById(
+                                        tradeUpdated.getCompositeId()
+                                )
+                                .ifPresent(compositeTrade -> {
+                                    compositeTrade.setState(tradeUpdated.getState());
+                                    tradeRepository.save(compositeTrade);
+                                });
+                    }
                 }
                 else {
                     tradeRepository.findById(
