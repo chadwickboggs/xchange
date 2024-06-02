@@ -1396,7 +1396,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/tradeComplete/1/1",
+									"raw": "http://{{host}}:{{port}}/tradeComplete/6bee68e7-f572-478f-ae83-0e8d9802a321/c772f499-5594-4157-aa5c-3dc1d26e4ae4",
 									"protocol": "http",
 									"host": [
 										"{{host}}"
@@ -1404,8 +1404,8 @@
 									"port": "{{port}}",
 									"path": [
 										"tradeComplete",
-										"1",
-										"1"
+										"6bee68e7-f572-478f-ae83-0e8d9802a321",
+										"c772f499-5594-4157-aa5c-3dc1d26e4ae4"
 									]
 								}
 							},
