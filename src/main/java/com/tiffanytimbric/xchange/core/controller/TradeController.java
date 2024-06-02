@@ -211,6 +211,7 @@ public class TradeController {
         if (trade.compositeIdOpt().isEmpty()) {
             Trade tradeCloned = (Trade) trade.clone();
             tradeCloned.setId(UUID.randomUUID());
+            tradeCloned.setItemTwoId(tradeCloned.getItemOneId());
             tradeCloned = tradeRepository.save(tradeCloned);
 
             trade.setCompositeId(tradeCloned.getId());
