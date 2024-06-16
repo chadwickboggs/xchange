@@ -1,5 +1,13 @@
 CREATE DATABASE IF NOT EXISTS xchngdb;
 
+CREATE TABLE IF NOT EXISTS user
+(
+    id        uuid primary key,
+    name      varchar(64) not null unique,
+    photo_url varchar(128),
+    balance   int         not null default 0
+);
+
 CREATE TABLE IF NOT EXISTS tag
 (
     name varchar(64) primary key
@@ -8,14 +16,6 @@ CREATE TABLE IF NOT EXISTS tag
 CREATE TABLE IF NOT EXISTS item_type
 (
     name varchar(64) primary key
-);
-
-CREATE TABLE IF NOT EXISTS user
-(
-    id        uuid primary key,
-    name      varchar(64) not null unique,
-    photo_url varchar(128),
-    balance   int         not null default 0
 );
 
 CREATE TABLE IF NOT EXISTS item
