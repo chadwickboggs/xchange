@@ -20,6 +20,26 @@ values
 insert into item_type
     (name)
 values
+    ('computer'),
+    ('clothing'),
+    ('tool'),
+    ('car'),
+    ('truck'),
+    ('van'),
+    ('jeap'),
     ('phone'),
-    ('paint')
+    ('paint'),
+    ('instrument'),
+    ('equipment'),
+    ('book'),
+    ('television'),
+    ('monitor'),
+    ('painting'),
+    ('sculpture'),
+    ('motorcycle'),
+    ('bicycle'),
+    ('firearm'),
+    ('knife'),
+    ('multitool'),
+    ('footware')
 ;
