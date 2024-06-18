@@ -256,7 +256,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"tiffany\",\n    \"balance\": 90\n}",
+									"raw": "{\n\t\"name\": \"tiffanytimbric\",\n    \"balance\": 70\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -491,7 +491,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/itemExist/1",
+									"raw": "http://{{host}}:{{port}}/itemExist/cc9b92ae-873f-440e-884e-6d07300b45d8",
 									"protocol": "http",
 									"host": [
 										"{{host}}"
@@ -499,7 +499,7 @@
 									"port": "{{port}}",
 									"path": [
 										"itemExist",
-										"1"
+										"cc9b92ae-873f-440e-884e-6d07300b45d8"
 									]
 								}
 							},
@@ -527,7 +527,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"iPhone SE\",\n    \"description\": \"This item is a 2022 iPhone SE.\",\n    \"photoUrl\": \"https://i.pcmag.com/imagery/reviews/06CbOjiKnKQyAK0K6LLTyLM-1..v1647630209.jpg\",\n    \"type\": {\n        \"name\": \"phone\"\n    },\n    \"owner\": \"d84f21b2-ed6e-4315-96d6-76a362531b4a\",\n    \"tags\": [\n        {\n            \"name\": \"white\"\n        }\n    ],\n    \"price\": \"50\"\n}",
+									"raw": "{\n\t\"name\": \"Samsung Galaxy Phone\",\n    \"description\": \"A Samsung Android OS mobile phone.\",\n    \"photoUrl\": null,\n    \"type\": {\n        \"name\": \"phone\"\n    },\n    \"owner\": \"1233ba9c-8403-492e-9f4c-5b3b5464c3af\",\n    \"tags\": [\n        {\n            \"name\": \"pink\"\n        }\n    ],\n    \"price\": \"50\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -560,7 +560,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{host}}:{{port}}/item/04b54895-edb7-4f72-b71c-29cc999d5b75",
+									"raw": "http://{{host}}:{{port}}/item/cc9b92ae-873f-440e-884e-6d07300b45d8",
 									"protocol": "http",
 									"host": [
 										"{{host}}"
@@ -568,7 +568,7 @@
 									"port": "{{port}}",
 									"path": [
 										"item",
-										"04b54895-edb7-4f72-b71c-29cc999d5b75"
+										"cc9b92ae-873f-440e-884e-6d07300b45d8"
 									]
 								}
 							},
@@ -994,7 +994,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"item_one_id\": \"04b54895-edb7-4f72-b71c-29cc999d5b75\",\n    \"item_two_id\": \"2d001d9d-7acf-4880-b082-7a925f27a3a5\"\n}",
+									"raw": "{\n    \"item_one_id\": \"86c18c6f-8f8d-4281-b7c9-d831ff1a2888\",\n    \"item_two_id\": \"2d001d9d-7acf-4880-b082-7a925f27a3a5\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
