@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,6 +18,7 @@ import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
+@PreAuthorize("hasRole('USER')")
 public class ItemController {
 
     private final ItemRepository itemRepository;

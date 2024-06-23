@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@PreAuthorize("hasRole('USER')")
 public class UserController {
 
     private final UserRepository userRepository;
