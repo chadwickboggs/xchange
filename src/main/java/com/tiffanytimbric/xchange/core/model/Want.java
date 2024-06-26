@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Optional;
@@ -17,6 +18,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "item")
 public class Want implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -8376813313220647607L;
 
     @Id
     private UUID id;

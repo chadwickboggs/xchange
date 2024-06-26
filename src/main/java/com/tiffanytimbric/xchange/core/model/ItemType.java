@@ -9,12 +9,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Optional;
 
 @Entity
 @Table(name = "item_type")
 public class ItemType implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 2842426661002885990L;
 
     @Id
     private String name;
