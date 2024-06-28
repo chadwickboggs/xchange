@@ -70,6 +70,10 @@ public class TradeUtil {
                         null, abandonedEndState, null
                 ),
                 new Transition(
+                        new Event("Abandon", null),
+                        null, abandonedEndState, null
+                ),
+                new Transition(
                         new Event("Receive", null),
                         new AllParticipantsPredicate(),
                         receivedState, null
@@ -78,6 +82,10 @@ public class TradeUtil {
 
         final State acceptedState = new State(
                 "Accepted", null,
+                new Transition(
+                        new Event("Abandon", null),
+                        null, abandonedEndState, null
+                ),
                 new Transition(
                         new Event("Abandon", null),
                         null, abandonedEndState, null
